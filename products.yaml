@@ -1,0 +1,8 @@
+products:
+  - name: test-cmd-tool
+    description: |
+      test-cmd-tool2
+    environments:
+      - test
+    proxies:
+      - apigee-account-proxy-v1

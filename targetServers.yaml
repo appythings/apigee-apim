@@ -1,0 +1,10 @@
+targetServers:
+  - name: google
+    host: google2.com
+  - name: google2
+    host: google2.com
+    sSLInfo:
+      clientAuthEnabled: true
+      keyStore: google-keystore
+      trustStore: google-truststore
+      keyAlias: google-key
