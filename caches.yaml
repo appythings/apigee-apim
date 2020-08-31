@@ -1,0 +1,7 @@
+caches:
+  - name: test-cache-1
+    description: cache1
+    expiryDate: 12-12-2020
+    valuesNull: false
+    overflowToDisk: false
+    skipCacheIfElementSizeInKBExceeds: 500
