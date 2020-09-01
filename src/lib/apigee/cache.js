@@ -6,13 +6,13 @@ class Cache {
     this.config = config
   }
 
-  async list (organization, environment) {
-    const response = await this.request(`/organizations/${organization}/environments/${environment}/caches`)
+  async list () {
+    const response = await this.request(`/organizations/${this.config.organization}/environments/${this.config.environment}/caches`)
     return response.data
   }
 
-  async detail (organization, environment, name) {
-    const response = await this.request(`/organizations/${organization}/environments/${environment}/caches/${name}`)
+  async detail (Cache) {
+    const response = await this.request(`/organizations/${this.config.organization}/environments/${this.config.environment}/caches/${Cache.name}`)
     return response.data
   }
 
@@ -35,13 +35,41 @@ class Cache {
     }
   }
 
-  async delete (organization, environment, name) {
-    try {
-      await this.request.delete(`/organizations/${organization}/environments/${environment}/caches/${name}`)
-    } catch (e) {
-      console.log('Cache error: ' + e.message)
-    }
-  }
+  async update (Kvm) {
+  //   const current = await this.detail(Kvm.name)
+  //   const updatePromises = current.entry.map(entry => {
+  //     const updatedEntry = Kvm.entry.find(newEntry => newEntry.name === entry.name)
+  //     if (!updatedEntry) {
+  //       return this.removeEntry(Kvm, entry)
+  //     }
+  //     if (updatedEntry.value !== entry.value) {
+  //       return this.updateEntry(Kvm, updatedEntry)
+  //     }
+  //   })
+  //   const addPromises = Kvm.entry.map(entry => {
+  //     const updatedEntry = current.entry.find(newEntry => newEntry.name === entry.name)
+  //     if (!updatedEntry) {
+  //       return this.addEntry(Kvm, entry)
+  //     }
+  //   })
+  //   return Promise.all([...updatePromises, ...addPromises])
+  // }
+
+  // async addEntry (Kvm, entry) {
+  //   return this.request.post(`/organizations/${this.config.organization}/environments/${this.config.environment}/keyvaluemaps/${Kvm.name}/entries`, entry)
+  // }
+  //
+  // async updateEntry (Kvm, entry) {
+  //   return this.request.post(`/organizations/${this.config.organization}/environments/${this.config.environment}/keyvaluemaps/${Kvm.name}/entries/${entry.name}`, entry)
+  // }
+  //
+  // async delete (organization, environment, name) {
+  //   try {
+  //     await this.request.delete(`/organizations/${organization}/environments/${environment}/caches/${name}`)
+  //   } catch (e) {
+  //     console.log('Cache error: ' + e.message)
+  //   }
+  // }
 
   async migrate () {
     const names = await this.list(this.config.oldOrg, this.config.environment)

@@ -1,7 +1,18 @@
+#caches:
+#  - name: test-cache-11123
+#    description: cache111
+#    expiryDate: 10-10-2020
+#    valuesNull: false
+#    overflowToDisk: false
+#    skipCacheIfElementSizeInKBExceeds: 500
+
 caches:
   - name: test-cache-1
-    description: cache1
-    expiryDate: 12-12-2020
-    valuesNull: false
+    description: cache111
+    expirySettings:
+      expiryDate:
+        value: 10-10-2020
+      valuesNull: false
     overflowToDisk: false
     skipCacheIfElementSizeInKBExceeds: 500
+

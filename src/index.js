@@ -41,6 +41,5 @@ program.command('targetservers <manifest>')
 program.command('caches <manifest>')
   .description('creates or updates a list of caches based on the given manifest')
   .action((manifest) => updateCache(build(), manifest).catch(handleError))
-// .action(console.log(createCache()))
 
 program.parse(process.argv)

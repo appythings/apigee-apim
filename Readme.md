@@ -52,3 +52,19 @@ targetServers:
       trustStore: google-truststore
       keyAlias: google-key
 ```
+
+# Caches
+```
+apigee-apim caches caches.yaml --org euw1-partner07 --env test
+```
+targetServers.yaml
+```
+caches:
+  - description: cache-1
+    expirySettings:
+        expiryDate:
+            value: mm-dd-yyy
+        valuesNull: true/false
+    overflowToDisk: true/false
+    skipCacheIfElementSizeInKBExceeds: 500
+```
