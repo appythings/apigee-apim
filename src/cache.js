@@ -13,23 +13,28 @@ const isUpdated = (a, b, properties) => {
     return a[prop] !== b[prop]
   })
 }
-
 module.exports = async (config, manifest) => {
   const apigee = new Apigee(config)
   let yml = yaml.safeLoad(fs.readFileSync(manifest, 'utf8'))
   const cacheConfig = yml.caches
+  console.log(yml.caches)
   if (!cacheConfig) {
     return false
   }
   Object.keys(cacheConfig).map(async (cacheName) => {
     const cache = cacheConfig[cacheName]
-
     expect(cache, 'The cache value is not an object').to.be.an('object')
-
     const newCache = {
       'name': cache.name,
       'description': cache.description,
-      'expirySettings': {'expiryDate': {'value': cache.expirySettings.expiryDate.value}, 'valuesNull': cache.expirySettings.valuesNull},
+      'expirySettings': {
+        'expiryDate': { 'value': cache.expiryDate },
+        'valuesNull': cache.expirySettings.valuesNull
+      },
+      // 'timeoutInSec': {'value': cache.expirySettings.timeoutInSec.value},
+      // 'timeOfDay': {'value': cache.expirySettings.timeOfDay.value},
+      // 'expiryDate': {'value': cache.expirySettings.expiryDate.value},
+
       'overflowToDisk': cache.overflowToDisk,
       'skipCacheIfElementSizeInKBExceeds': cache.skipCacheIfElementSizeInKBExceeds
     }
