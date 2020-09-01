@@ -8,10 +8,10 @@
 
 caches:
   - name: test-cache-1
-    description: cache111
+    description: test-cache-11
     expirySettings:
       expiryDate:
-        value: 10-10-2020
+        value: 10-10-2015
       valuesNull: false
     overflowToDisk: false
     skipCacheIfElementSizeInKBExceeds: 500

@@ -24,7 +24,7 @@ module.exports = async (config, manifest, purgeDeleted) => {
   }
   expect(kvmConfig, 'The KVM config is not an object').to.be.an('object')
   Object.keys(kvmConfig).map(async (kvmName) => {
-    const kvm = kvmConfig[kvmName];
+    const kvm = kvmConfig[kvmName]
     expect(kvm, 'The KVM value is not an object').to.be.an('object')
 
     const newkvm = {

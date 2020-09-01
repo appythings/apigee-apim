@@ -30,12 +30,12 @@ module.exports = async (config, manifest) => {
       'name': cache.name,
       'description': cache.description,
       'expirySettings': {'expiryDate': {'value': cache.expirySettings.expiryDate.value}, 'valuesNull': cache.expirySettings.valuesNull},
-      'valuesNull': cache.valuesNull,
       'overflowToDisk': cache.overflowToDisk,
       'skipCacheIfElementSizeInKBExceeds': cache.skipCacheIfElementSizeInKBExceeds
     }
+
     try {
-      await apigee.cache.detail(newCache)
+      await apigee.cache.detail(newCache.name)
       await apigee.cache.update(newCache)
       console.log('Updated cache: ' + newCache.name)
     } catch (e) {
