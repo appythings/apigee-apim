@@ -13,6 +13,24 @@ const isUpdated = (a, b, properties) => {
     return a[prop] !== b[prop]
   })
 }
+
+const validateDate = (cache) => {
+  if ((cache.timeoutInSec !== null && cache.timeOfDay !== null) ||
+     (cache.timeOfDay !== null && cache.expiryDate !== null) ||
+     (cache.timeoutInSec !== null && cache.expiryDate !== null)) {
+      console.log('You can only have 1 expirySettings option. Set to default 300 seconds')
+    return {'timeoutInSec': {'value': 300}, 'valuesNull': cache.expirySettings.valuesNull}
+  } else if (cache.expiryDate) {
+      return {'expiryDate': {'value': cache.expiryDate}, 'valuesNull': cache.expirySettings.valuesNull}
+  } else if (cache.timeOfDay) {
+      return {'timeOfDay': {'value': cache.timeOfDay}, 'valuesNull': cache.expirySettings.valuesNull}
+  } else if (cache.timeoutInSec) {
+      return {'timeoutInSec': {'value': cache.timeoutInSec}, 'valuesNull': cache.expirySettings.valuesNull}
+  } else {
+      return {'timeoutInSec': {'value': 300}, 'valuesNull': cache.valuesNull}
+  }
+}
+
 module.exports = async (config, manifest) => {
   const apigee = new Apigee(config)
   let yml = yaml.safeLoad(fs.readFileSync(manifest, 'utf8'))
@@ -27,14 +45,7 @@ module.exports = async (config, manifest) => {
     const newCache = {
       'name': cache.name,
       'description': cache.description,
-      'expirySettings': {
-        'expiryDate': { 'value': cache.expiryDate },
-        'valuesNull': cache.expirySettings.valuesNull
-      },
-      // 'timeoutInSec': {'value': cache.expirySettings.timeoutInSec.value},
-      // 'timeOfDay': {'value': cache.expirySettings.timeOfDay.value},
-      // 'expiryDate': {'value': cache.expirySettings.expiryDate.value},
-
+      'expirySettings': validateDate(cache),
       'overflowToDisk': cache.overflowToDisk,
       'skipCacheIfElementSizeInKBExceeds': cache.skipCacheIfElementSizeInKBExceeds
     }
