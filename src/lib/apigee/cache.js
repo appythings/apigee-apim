@@ -6,21 +6,39 @@ class Cache {
     this.config = config
   }
 
-  async list (organization, environment) {
-    const response = await this.request(`/organizations/${organization}/environments/${environment}/caches`)
+  async list () {
+    const response = await this.request(`/organizations/${this.config.organization}/environments/${this.config.environment}/caches`)
     return response.data
   }
 
-  async detail (organization, environment, name) {
-    const response = await this.request(`/organizations/${organization}/environments/${environment}/caches/${name}`)
+  async detail (name) {
+    const response = await this.request(`/organizations/${this.config.organization}/environments/${this.config.environment}/caches/${name}`)
     return response.data
   }
-
-  async add (organization, environment, cache) {
+  // async add (organization, environment, cache) {
+  //   console.log(organization)
+  //   console.log(environment)
+  //   console.log('??',cache)
+  //   try {
+  //     await this.request.post(`/organizations/${organization}/environments/${environment}/caches?name=${cache.name}`, cache)
+  //   } catch (e) {
+  //     console.log('Cache already exists. Skipping.')
+  //   }
+  // }
+  async add (Cache) {
+    console.log('Ehh?', Cache)
     try {
-      await this.request.post(`/organizations/${organization}/environments/${environment}/caches?name=${cache.name}`, cache)
+      await this.request.post(`/organizations/${this.config.organization}/environments/${this.config.environment}/caches`, Cache)
     } catch (e) {
       console.log('Cache already exists. Skipping.')
+    }
+  }
+
+  async update (Cache) {
+    try {
+      await this.request.post(`/organizations/${this.config.organization}/environments/${this.config.environment}/caches/${Cache.name}`, Cache)
+    } catch (e) {
+      console.log(e)
     }
   }
 

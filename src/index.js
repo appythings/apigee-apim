@@ -4,6 +4,7 @@ const {version, name, description} = require('../package.json')
 const updateProducts = require('./apiproduct')
 const updateKvms = require('./kvms')
 const targetserver = require('./targetserver')
+const updateCache = require('./cache')
 
 function handleError (e) {
   console.error('ERROR:')
@@ -36,5 +37,9 @@ program.command('kvms <manifest>')
 
 program.command('targetservers <manifest>')
   .action((manifest, command) => targetserver(build(), manifest).catch(handleError))
+
+program.command('caches <manifest>')
+  .description('creates or updates a list of caches based on the given manifest')
+  .action((manifest) => updateCache(build(), manifest).catch(handleError))
 
 program.parse(process.argv)
