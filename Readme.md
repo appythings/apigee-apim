@@ -57,14 +57,15 @@ targetServers:
 ```
 apigee-apim caches caches.yaml --org euw1-partner07 --env test
 ```
-targetServers.yaml
+caches.yaml
 ```
 caches:
   - description: cache-1
     expirySettings:
-        expiryDate:
-            value: mm-dd-yyy
         valuesNull: true/false
+    timeoutInSec: {sec}
+    timeOfDay: {hh:mm:ss:}
+
     overflowToDisk: true/false
     skipCacheIfElementSizeInKBExceeds: 500
 ```
