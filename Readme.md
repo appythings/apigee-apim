@@ -26,7 +26,7 @@ products:
 ```
 # KVMS
 ```
-apigee-apim kvms kvms.yaml --org euw1-partner07 --env test 
+apigee-apim kvms kvms.yaml --org <org> --env test 
 ```
 kvms.yaml
 ```
@@ -37,7 +37,7 @@ kvms:
 ```
 # Target Servers
 ```
-apigee-apim targetservers targetServers.yaml --org euw1-partner07 --env test
+apigee-apim targetservers targetServers.yaml --org <org> --env test
 ```
 targetServers.yaml
 ```

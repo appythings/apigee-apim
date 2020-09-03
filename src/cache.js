@@ -35,12 +35,10 @@ module.exports = async (config, manifest) => {
   const apigee = new Apigee(config)
   let yml = yaml.safeLoad(fs.readFileSync(manifest, 'utf8'))
   const cacheConfig = yml.caches
-  if (!cacheConfig) {
+  if (cacheConfig === Array) {
     return false
   }
-  Object.keys(cacheConfig).map(async (cacheName) => {
-    const cache = cacheConfig[cacheName]
-    expect(cache, 'The cache value is not an object').to.be.an('object')
+  cacheConfig.map(async (cache) => {
     const newCache = {
       'name': cache.name,
       'description': cache.description,

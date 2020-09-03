@@ -1,9 +1,9 @@
 caches:
-  - name: test-cache-1
-    description: test-cache-1
+  - name: test-cache-22
+    description: test-cache-3
     expirySettings:
       valuesNull: false
-    timeoutInSec: 400
+    timeoutInSec: 60
     timeOfDay:
     expiryDate:
     overflowToDisk: false
