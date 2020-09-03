@@ -55,7 +55,7 @@ targetServers:
 
 # Caches
 ```
-apigee-apim caches caches.yaml --org euw1-partner07 --env test
+apigee-apim caches caches.yaml --org <org> --env test
 ```
 caches.yaml
 ```
@@ -65,7 +65,7 @@ caches:
         valuesNull: true/false
     timeoutInSec: {sec}
     timeOfDay: {hh:mm:ss:}
-
+    expiryDate: {mm-dd-yyy}
     overflowToDisk: true/false
-    skipCacheIfElementSizeInKBExceeds: 500
+    skipCacheIfElementSizeInKBExceeds: {num_elements}
 ```

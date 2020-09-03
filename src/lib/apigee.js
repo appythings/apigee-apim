@@ -29,6 +29,6 @@ class Apigee {
     this.resource = new Resource(this.request, config)
     this.apiproduct = new Apiproduct(this.request, config)
   }
-
 }
+
 module.exports = Apigee
