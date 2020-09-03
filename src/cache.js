@@ -15,10 +15,7 @@ const isUpdated = (a, b, properties) => {
 }
 
 const validateDate = (cache) => {
-  if (((cache.timeoutInSec !== null || undefined) && (cache.timeOfDay !== null || undefined)) ||
-     ((cache.timeOfDay !== null || undefined) && (cache.expiryDate !== null || undefined)) ||
-     ((cache.timeoutInSec !== null || undefined) && (cache.expiryDate !== null || undefined))) {
-    console.log('You can only have 1 expirySettings option. Set to default 300 seconds')
+  if ((cache.timeoutInSec && cache.timeOfDay) || (cache.timeOfDay && cache.expiryDate) || (cache.timeoutInSec && cache.expiryDate)) {
     return {'timeoutInSec': {'value': 300}, 'valuesNull': cache.expirySettings.valuesNull}
   } else if (cache.expiryDate) {
     return {'expiryDate': {'value': cache.expiryDate}, 'valuesNull': cache.expirySettings.valuesNull}
@@ -35,7 +32,7 @@ module.exports = async (config, manifest) => {
   const apigee = new Apigee(config)
   let yml = yaml.safeLoad(fs.readFileSync(manifest, 'utf8'))
   const cacheConfig = yml.caches
-  if (cacheConfig === Array) {
+  if (!Array.isArray(cacheConfig)) {
     return false
   }
   cacheConfig.map(async (cache) => {
