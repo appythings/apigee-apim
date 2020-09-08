@@ -1,30 +1,19 @@
 const Apigee = require('./lib/apigee')
 const yaml = require('js-yaml')
 const fs = require('fs')
-const chai = require('chai')
-const expect = chai.expect
-
-const isUpdated = (a, b, properties) => {
-  return properties.find(prop => {
-    if (prop.includes('.')) {
-      const props = prop.split('.')
-      return a[props[0]][props[1]] !== b[props[0]][props[1]]
-    }
-    return a[prop] !== b[prop]
-  })
-}
 
 const validateDate = (cache) => {
   if ((cache.timeoutInSec && cache.timeOfDay) || (cache.timeOfDay && cache.expiryDate) || (cache.timeoutInSec && cache.expiryDate)) {
-    return {'timeoutInSec': {'value': 300}, 'valuesNull': cache.expirySettings.valuesNull}
-  } else if (cache.expiryDate) {
-    return {'expiryDate': {'value': cache.expiryDate}, 'valuesNull': cache.expirySettings.valuesNull}
-  } else if (cache.timeOfDay) {
-    return {'timeOfDay': {'value': cache.timeOfDay}, 'valuesNull': cache.expirySettings.valuesNull}
-  } else if (cache.timeoutInSec) {
-    return {'timeoutInSec': {'value': cache.timeoutInSec}, 'valuesNull': cache.expirySettings.valuesNull}
-  } else {
-    return {'timeoutInSec': {'value': 300}, 'valuesNull': cache.expirySettings.valuesNull}
+    throw new Error(`Only one of 'timeoutInSec', 'timeOfDay', 'expiryDate' can be filled`)
+  }
+  if (!cache.timeoutInSec && !cache.timeOfDay && !cache.expiryDate) {
+    throw new Error(`At least one of 'timeoutInSec', 'timeOfDay', 'expiryDate' must be filled`)
+  }
+  return {
+    'timeOfDay': { 'value': cache.timeOfDay },
+    'timeoutInSec': { 'value': cache.timeoutInSec },
+    'expiryDate': { 'value': cache.expiryDate },
+    'valuesNull': cache.expirySettings.valuesNull
   }
 }
 
@@ -35,7 +24,7 @@ module.exports = async (config, manifest) => {
   if (!Array.isArray(cacheConfig)) {
     return false
   }
-  cacheConfig.map(async (cache) => {
+  return Promise.all(cacheConfig.map(async (cache) => {
     const newCache = {
       'name': cache.name,
       'description': cache.description,
@@ -57,5 +46,5 @@ module.exports = async (config, manifest) => {
         process.exitCode = 1
       }
     }
-  })
+  }))
 }
