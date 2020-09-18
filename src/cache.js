@@ -20,6 +20,9 @@ const validateDate = (cache) => {
 module.exports = async (config, manifest) => {
   const apigee = new Apigee(config)
   let yml = yaml.safeLoad(fs.readFileSync(manifest, 'utf8'))
+  if (!yml) {
+    return false
+  }
   const cacheConfig = yml.caches
   if (!Array.isArray(cacheConfig)) {
     return false

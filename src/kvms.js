@@ -18,6 +18,9 @@ const isUpdated = (a, b, properties) => {
 module.exports = async (config, manifest, purgeDeleted) => {
   const apigee = new Apigee(config)
   let yml = yaml.safeLoad(fs.readFileSync(manifest, 'utf8'))
+  if (!yml) {
+    return false
+  }
   const kvmConfig = yml.kvms
   if (!kvmConfig) {
     return false
