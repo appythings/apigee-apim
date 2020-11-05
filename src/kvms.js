@@ -33,7 +33,7 @@ module.exports = async (config, manifest, purgeDeleted) => {
     const newkvm = {
       'name': kvmName,
       'encrypted': false,
-      'scope': 'ENV',
+      // 'scope': 'ENV',
       'entry': Object.keys(kvm).map(key => ({'name': key, 'value': kvm[key]}))
     }
 
@@ -43,7 +43,11 @@ module.exports = async (config, manifest, purgeDeleted) => {
       console.log('Updated kvm: ' + newkvm.name)
     } catch (e) {
       if (e.message.includes('404')) {
-        await apigee.kvm.add(newkvm)
+        try{
+          await apigee.kvm.add(newkvm)
+        } catch (e) {
+          console.log(e.response.data)
+        }
         console.log('Created kvm: ' + newkvm.name)
       } else {
         console.log(e)

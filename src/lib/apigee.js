@@ -1,4 +1,6 @@
 const axios = require('axios')
+const qs = require('qs')
+const fs = require('fs-extra')
 const Cache = require('./apigee/cache')
 const Kvm = require('./apigee/kvm')
 const Targetserver = require('./apigee/targetserver')
@@ -12,12 +14,12 @@ class Apigee {
   constructor (config) {
     this.config = config
     this.request = axios.create({
-      baseURL: 'https://api.enterprise.apigee.com/v1',
+      baseURL: config.url,
       timeout: 60000,
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        Authorization: 'Basic ' + Buffer.from(`${this.config.username}:${this.config.password}`).toString('base64')
+        Authorization: config.hybrid ? `Bearer ${config.hybrid}` : undefined
       }
     })
     this.cache = new Cache(this.request, config)
@@ -28,6 +30,26 @@ class Apigee {
     this.sharedFlow = new SharedFlow(this.request, config)
     this.resource = new Resource(this.request, config)
     this.apiproduct = new Apiproduct(this.request, config)
+  }
+
+  async login () {
+    if (this.config.hybrid) {
+      return
+    }
+    const data = { 'username': this.config.username, 'password': this.config.password, 'grant_type': 'password' }
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': 'Basic ZWRnZWNsaTplZGdlY2xpc2VjcmV0'
+      },
+      data: qs.stringify(data),
+      url: 'https://login.apigee.com/oauth/token'
+    }
+    const response = await axios(options)
+    this.request.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.access_token
+    this.spec.setRequest(this.request)
+    this.portal.setRequest(this.request)
   }
 }
 
