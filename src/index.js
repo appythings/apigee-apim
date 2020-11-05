@@ -6,6 +6,7 @@ const updateKvms = require('./kvms')
 const targetserver = require('./targetserver')
 const updateCache = require('./cache')
 const deployProxy = require('./proxy')
+const deploySharedFlow = require('./sharedFlow')
 
 function handleError (e) {
   console.error('ERROR:')
@@ -49,7 +50,13 @@ program.command('caches <manifest>')
 program.command('deploy')
   .requiredOption('-n, --api <name>', 'The name of the API proxy. Note: The name of the API proxy must be unique within an organization. The characters you are allowed to use in the name are restricted to the following: A-Z0-9._\\-$ %.')
   .option('-d, --directory <directory>', 'The path to the root directory of the API proxy on your local system. Will attempt to use current directory is none is specified.', 'apiproxy')
-  .description('deploy a proxy based on a zip file')
-  .action((options) => deployProxy(build(), options.name, options.directory).catch(handleError))
+  .description('deploy a proxy based on a folder')
+  .action((options) => deployProxy(build(), options.api, options.directory).catch(handleError))
+
+program.command('deploySharedFlow')
+  .requiredOption('-n, --sf <name>', 'The name of the SharedFlow. Note: The name of the SharedFlow must be unique within an organization. The characters you are allowed to use in the name are restricted to the following: A-Z0-9._\\-$ %.')
+  .option('-d, --directory <directory>', 'The path to the root directory of the sharedflow on your local system. Will attempt to use current directory is none is specified.', 'sharedflowbundle')
+  .description('Deploys a sharedFlow to Apigee Edge. If the sharedFlow is currently deployed, it will be undeployed first, and the newly deployed sharedflow\'s revision number is incremented.')
+  .action((options) => deploySharedFlow(build(), options.sf, options.directory).catch(handleError))
 
 program.parse(process.argv)
