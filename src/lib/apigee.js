@@ -19,7 +19,7 @@ class Apigee {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        Authorization: config.hybrid ? `Bearer ${config.hybrid}` : undefined
+        Authorization: config.hybrid ? `Bearer ${config.hybrid}` : 'Basic ' + Buffer.from(`${this.config.username}:${this.config.password}`).toString('base64')
       }
     })
     this.cache = new Cache(this.request, config)
