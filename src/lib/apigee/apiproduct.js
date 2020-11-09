@@ -39,15 +39,11 @@ class Apiproduct {
   }
 
   async add (Apiproduct) {
-    try {
-      const detail = await this.detail(Apiproduct.name)
-      if (detail) {
-        await this.request.put(`/organizations/${this.config.organization}/apiproducts/${Apiproduct.name}`, Apiproduct)
-      } else {
-        await this.request.post(`/organizations/${this.config.organization}/apiproducts`, Apiproduct)
-      }
-    } catch (e) {
-      console.log(e)
+    const detail = await this.detail(Apiproduct.name)
+    if (detail) {
+      await this.request.put(`/organizations/${this.config.organization}/apiproducts/${Apiproduct.name}`, Apiproduct)
+    } else {
+      await this.request.post(`/organizations/${this.config.organization}/apiproducts`, Apiproduct)
     }
   }
 

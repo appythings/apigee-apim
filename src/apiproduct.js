@@ -23,7 +23,7 @@ module.exports = async (config, manifest) => {
   if (!productConfig) {
     return false
   }
-  productConfig.map(async (product) => {
+  return productConfig.map(async (product) => {
     const newProduct = {
       'apiResources': [],
       'approvalType': product.approvalType || 'auto',
