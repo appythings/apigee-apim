@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 const program = require('commander')
-const {version, name, description} = require('../package.json')
+const { version, name, description } = require('../package.json')
 const updateProducts = require('./apiproduct')
 const updateKvms = require('./kvms')
 const targetserver = require('./targetserver')
 const updateCache = require('./cache')
-const deployProxy = require('./proxy')
+const { deployProxy, listDeployedRevision } = require('./proxy')
 const deploySharedFlow = require('./sharedFlow')
 
 function handleError (e) {
@@ -58,5 +58,10 @@ program.command('deploySharedFlow')
   .option('-d, --directory <directory>', 'The path to the root directory of the sharedflow on your local system. Will attempt to use current directory is none is specified.', 'sharedflowbundle')
   .description('Deploys a sharedFlow to Apigee Edge. If the sharedFlow is currently deployed, it will be undeployed first, and the newly deployed sharedflow\'s revision number is incremented.')
   .action((options) => deploySharedFlow(build(), options.sf, options.directory).catch(handleError))
+
+program.command('listDeployedRevision')
+  .requiredOption('-n, --api <name>', 'The name of the API proxy. Note: The name of the API proxy must be unique within an organization. The characters you are allowed to use in the name are restricted to the following: A-Z0-9._\\-$ %.')
+  .description('lists the currently deployed revision for an API on an environment')
+  .action((options) => listDeployedRevision(build(), options.api).catch(handleError))
 
 program.parse(process.argv)

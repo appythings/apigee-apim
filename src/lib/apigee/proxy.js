@@ -1,5 +1,5 @@
 const { expect } = require('chai')
-const FormData = require('form-data');
+const FormData = require('form-data')
 
 class Proxy {
   constructor (request, config) {
@@ -26,6 +26,11 @@ class Proxy {
       console.log(`Proxy ${name} is not deployed in ${this.config.environment}`)
       return null
     }
+  }
+
+  async deployment (name) {
+    const deployment = await this.request(`/organizations/${this.config.organization}/environments/${this.config.environment}/apis/${name}/deployments`)
+    return deployment.data.revision.find((rev) => rev.state === 'deployed')
   }
 
   async add (Proxy, name) {
