@@ -11,17 +11,17 @@ class Portal {
     this.request.defaults.baseURL = 'https://apigee.com'
   }
 
-  async checkIfSpecExists (swagger, product) {
-    const apidocs = await this.request(`/portals/api/sites/${this.organization}-${this.portal}/apidocs`)
+  async checkIfSpecExists (swagger, product, portal) {
+    const apidocs = await this.request(`/portals/api/sites/${this.organization}-${portal}/apidocs`)
     const doc = apidocs.data.data.find(content => content.edgeAPIProductName === product)
     if (!doc) {
       return undefined
     }
-    return this.request(`/portals/api/sites/${this.organization}-${this.portal}/apidocs/${doc.id}`)
+    return this.request(`/portals/api/sites/${this.organization}-${portal}/apidocs/${doc.id}`)
   }
 
   async publishSpecToPortal (swagger, spec, product, portal) {
-    let exists = await this.checkIfSpecExists(swagger, product)
+    let exists = await this.checkIfSpecExists(swagger, product, portal)
     if (!exists) {
       const newSpec = await this.request.post(`/portals/api/sites/${this.organization}-${portal}/apidocs`, {
         'title': `${swagger.info.title}-v${swagger.info.version.split('.')[0]}`,
