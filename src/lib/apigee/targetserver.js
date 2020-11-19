@@ -1,9 +1,11 @@
-const {expect} = require('chai')
-
 class TargetServer {
   constructor (request, config) {
     this.request = request
     this.config = config
+  }
+
+  setRequest (request) {
+    this.request = request
   }
 
   async list () {

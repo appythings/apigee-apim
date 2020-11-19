@@ -1,4 +1,3 @@
-const {expect} = require('chai')
 const Application = require('./application')
 
 class Apiproduct {
@@ -6,6 +5,10 @@ class Apiproduct {
     this.request = request
     this.config = config
     this.applications = new Application(request, config)
+  }
+
+  setRequest (request) {
+    this.request = request
   }
 
   async list (environment) {

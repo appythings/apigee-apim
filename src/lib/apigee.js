@@ -9,6 +9,8 @@ const Proxy = require('./apigee/proxy')
 const SharedFlow = require('./apigee/sharedFlow')
 const Resource = require('./apigee/resource')
 const Apiproduct = require('./apigee/apiproduct')
+const Spec = require('./specs-api/spec')
+const Portal = require('./specs-api/portal')
 
 class Apigee {
   constructor (config) {
@@ -19,7 +21,8 @@ class Apigee {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        Authorization: config.hybrid ? `Bearer ${config.hybrid}` : 'Basic ' + Buffer.from(`${this.config.username}:${this.config.password}`).toString('base64')
+        Authorization: config.token ? `Bearer ${config.token}`
+          : config.hybrid ? `Bearer ${config.hybrid}` : 'Basic ' + Buffer.from(`${this.config.username}:${this.config.password}`).toString('base64')
       }
     })
     this.cache = new Cache(this.request, config)
@@ -30,10 +33,12 @@ class Apigee {
     this.sharedFlow = new SharedFlow(this.request, config)
     this.resource = new Resource(this.request, config)
     this.apiproduct = new Apiproduct(this.request, config)
+    this.spec = new Spec(this.request, this.config)
+    this.portal = new Portal(this.request, this.config)
   }
 
   async login () {
-    if (this.config.hybrid) {
+    if (this.config.token || this.config.hybrid) {
       return
     }
     const data = { 'username': this.config.username, 'password': this.config.password, 'grant_type': 'password' }
@@ -48,6 +53,14 @@ class Apigee {
     }
     const response = await axios(options)
     this.request.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.access_token
+    this.cache.setRequest(this.request)
+    this.kvm.setRequest(this.request)
+    this.targetserver.setRequest(this.request)
+    this.proxy.setRequest(this.request)
+    this.keystore.setRequest(this.request)
+    this.sharedFlow.setRequest(this.request)
+    this.resource.setRequest(this.request)
+    this.apiproduct.setRequest(this.request)
     this.spec.setRequest(this.request)
     this.portal.setRequest(this.request)
   }

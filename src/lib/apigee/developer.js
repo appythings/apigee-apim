@@ -6,6 +6,10 @@ class Developer {
     this.config = config
   }
 
+  setRequest (request) {
+    this.request = request
+  }
+
   async list (organization, environment) {
     const response = await this.request(`/organizations/${organization}/developers`)
     return response.data

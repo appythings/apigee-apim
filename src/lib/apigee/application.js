@@ -8,6 +8,10 @@ class Application {
     this.developer = new Developer(request, config)
   }
 
+  setRequest (request) {
+    this.request = request
+  }
+
   async list (organization, products) {
     const response = await this.request(`/organizations/${organization}/apps?expand=true&includeCred=true`)
     return response.data.app.filter(
