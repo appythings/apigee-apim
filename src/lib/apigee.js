@@ -54,6 +54,7 @@ class Apigee {
     }
     const response = await axios(options)
     this.request.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.access_token
+    this.request.defaults.headers['Authorization'] = 'Bearer ' + response.data.access_token
     this.cache.setRequest(this.request)
     this.kvm.setRequest(this.request)
     this.targetserver.setRequest(this.request)
