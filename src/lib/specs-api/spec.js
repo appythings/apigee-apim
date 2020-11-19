@@ -2,14 +2,16 @@ class Spec {
   constructor (request, config) {
     this.environment = config.environment
     this.request = request
+    this.config = config
   }
 
   setRequest (request) {
     this.request = request
+    this.request.defaults.baseURL = 'https://apigee.com'
   }
 
   async getAutoFolder () {
-    const homeFolder = await this.request(`/homeFolder/contents`)
+    const homeFolder = await this.request(`/organizations/${this.config.organization}/specs/folder/home`)
     const autoFolder = homeFolder.data.contents.find(content => content.name === 'auto' && content.kind === 'Folder')
     if (!autoFolder) {
       await this.createAutoFolder()
@@ -18,42 +20,42 @@ class Spec {
     return autoFolder
   }
 
+  getFolderContent (id) {
+    return this.request(`/organizations/${this.config.organization}/specs/folder/${id}`)
+  }
+
   async createAutoFolder () {
-    const homeFolder = await this.request(`/homeFolder`)
-    const response = await this.request.post(`/folders`, {
+    const homeFolder = await this.request(`/organizations/${this.config.organization}/specs/folder/home`)
+    const response = await this.request.post(`/organizations/${this.config.organization}/specs/folder`, {
       'name': 'auto',
-      'Description': 'Automatically generated specs',
-      'kind': 'Folder',
-      'folder': homeFolder.data.self
+      'folder': homeFolder.data.id
     })
     return response.data
   }
 
   async checkIfSwaggerExists (swagger) {
     const autoFolder = await this.getAutoFolder()
-    const autoFolderContent = await this.request(autoFolder.contents)
+    const autoFolderContent = await this.getFolderContent(autoFolder.id)
     return autoFolderContent.data.contents.find(content => content.name === `${swagger.info.title}-v${swagger.info.version.split('.')[0]}-${this.environment}`)
   }
 
   async createOrUpdateSwagger (swagger) {
     let swaggerSpec = await this.checkIfSwaggerExists(swagger)
-    let etag = null
+    let id = null
     let url = null
     let self = null
     if (!swaggerSpec) {
       const autoFolder = await this.getAutoFolder()
-      const newSpec = await this.request.post('/specs/new', {
+      const newSpec = await this.request.post(`/organizations/${this.config.organization}/specs/doc`, {
         'name': `${swagger.info.title}-v${swagger.info.version.split('.')[0]}-${this.environment}`,
         'kind': 'Doc',
-        'description': '',
-        'folder': autoFolder.self
+        'folder': autoFolder.id
       })
-      etag = newSpec.headers.etag
+      id = newSpec.data.id
       url = newSpec.data.content
       self = newSpec.data.self
     } else {
-      const swaggerSpecContent = await this.request(swaggerSpec.content)
-      etag = swaggerSpecContent.headers.etag
+      id = swaggerSpec.id
       url = swaggerSpec.content
       self = swaggerSpec.self
     }
@@ -62,9 +64,9 @@ class Spec {
       method: 'PUT',
       url: url,
       data: swagger,
-      headers: { 'Content-Type': 'text/plain', 'If-Match': etag }
+      headers: { 'Content-Type': 'text/plain' }
     })
-    return { self: self, content: url }
+    return { self: self, content: id }
   }
 }
 

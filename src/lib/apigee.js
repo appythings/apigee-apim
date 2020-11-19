@@ -34,8 +34,8 @@ class Apigee {
     this.sharedFlow = new SharedFlow(this.request, config)
     this.resource = new Resource(this.request, config)
     this.apiproduct = new Apiproduct(this.request, config)
-    this.spec = new Spec(this.request, this.config)
-    this.portal = new Portal(this.request, this.config)
+    this.spec = new Spec(this.request, config)
+    this.portal = new Portal(this.request, config)
   }
 
   async login () {
@@ -54,6 +54,7 @@ class Apigee {
     }
     const response = await axios(options)
     this.request.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.access_token
+    this.request.defaults.headers['Authorization'] = 'Bearer ' + response.data.access_token
     this.cache.setRequest(this.request)
     this.kvm.setRequest(this.request)
     this.targetserver.setRequest(this.request)
