@@ -7,10 +7,14 @@ const targetserver = require('./targetserver')
 const updateCache = require('./cache')
 const { deployProxy, listDeployedRevision } = require('./proxy')
 const deploySharedFlow = require('./sharedFlow')
+const deploySpec = require('./portal')
 
 function handleError (e) {
   console.error('ERROR:')
   console.error(e.message)
+  if (e.response) {
+    console.error(e.response.data)
+  }
   process.exit(1)
 }
 
@@ -21,7 +25,9 @@ const build = () => {
     environment: program.env,
     username: process.env.APIGEE_USERNAME || process.env.APIGEE_USER,
     password: process.env.APIGEE_PASSWORD,
-    url: program.hybrid ? 'https://apigee.googleapis.com/v1' : 'https://api.enterprise.apigee.com/v1'
+    url: program.baseuri ? program.baseuri
+      : program.hybrid ? 'https://apigee.googleapis.com/v1' : 'https://api.enterprise.apigee.com/v1',
+    token: program.token
   }
 }
 
@@ -31,6 +37,8 @@ program.name(name)
   .option('-o, --org <org>', 'apigee org')
   .option('-e, --env <env>', 'apigee env')
   .option('-h, --hybrid <accessToken>', 'specify if you wish to deploy to Apigee hybrid')
+  .option('-L, --baseuri <baseuri>', ' The base URI for you organization on Apigee Edge. The default is the base URI for Apigee cloud deployments is api.enterprise.apigee.com. For on-premise deployments, the base URL may be different.')
+  .option('-t, --token <accessToken>', ' Your Apigee access token. Use this in lieu of -u / -p')
 
 program.command('products <manifest>')
   .description('creates or updates a list of products based on the given manifest')
@@ -58,6 +66,13 @@ program.command('deploySharedFlow')
   .option('-d, --directory <directory>', 'The path to the root directory of the sharedflow on your local system. Will attempt to use current directory is none is specified.', 'sharedflowbundle')
   .description('Deploys a sharedFlow to Apigee Edge. If the sharedFlow is currently deployed, it will be undeployed first, and the newly deployed sharedflow\'s revision number is incremented.')
   .action((options) => deploySharedFlow(build(), options.sf, options.directory).catch(handleError))
+
+program.command('deploySpec')
+  .requiredOption('-a, --apiproduct <apiproduct>', 'Name of the apiproduct')
+  .requiredOption('-p, --portal <portal>', 'Name of the portal')
+  .option('-s, --spec <spec>', 'The path to the root spec', 'swagger.json')
+  .description('Deploys a spec to a portal')
+  .action((options) => deploySpec(build(), options.spec, options.apiproduct, options.portal).catch(handleError))
 
 program.command('listDeployedRevision')
   .requiredOption('-n, --api <name>', 'The name of the API proxy. Note: The name of the API proxy must be unique within an organization. The characters you are allowed to use in the name are restricted to the following: A-Z0-9._\\-$ %.')

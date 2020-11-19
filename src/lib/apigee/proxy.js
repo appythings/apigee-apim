@@ -1,10 +1,11 @@
-const { expect } = require('chai')
-const FormData = require('form-data')
-
 class Proxy {
   constructor (request, config) {
     this.request = request
     this.config = config
+  }
+
+  setRequest (request) {
+    this.request = request
   }
 
   async list () {

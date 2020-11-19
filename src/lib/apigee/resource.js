@@ -6,6 +6,10 @@ class Resource {
     this.config = config
   }
 
+  setRequest (request) {
+    this.request = request
+  }
+
   async list (organization) {
     const response = await this.request(`/organizations/${organization}/resourcefiles`)
     return response.data.resourceFile

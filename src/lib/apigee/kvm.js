@@ -6,6 +6,10 @@ class Kvm {
     this.config = config
   }
 
+  setRequest (request) {
+    this.request = request
+  }
+
   async list () {
     const response = await this.request(`/organizations/${this.config.organization}/environments/${this.config.environment}/keyvaluemaps`)
     return response.data
