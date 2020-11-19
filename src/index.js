@@ -12,6 +12,9 @@ const deploySpec = require('./portal')
 function handleError (e) {
   console.error('ERROR:')
   console.error(e.message)
+  if (e.response) {
+    console.error(e.response.data)
+  }
   process.exit(1)
 }
 

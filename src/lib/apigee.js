@@ -21,6 +21,7 @@ class Apigee {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
+        'X-Org-Name': config.organization,
         Authorization: config.token ? `Bearer ${config.token}`
           : config.hybrid ? `Bearer ${config.hybrid}` : 'Basic ' + Buffer.from(`${this.config.username}:${this.config.password}`).toString('base64')
       }
