@@ -34,8 +34,8 @@ class Apigee {
     this.sharedFlow = new SharedFlow(this.request, config)
     this.resource = new Resource(this.request, config)
     this.apiproduct = new Apiproduct(this.request, config)
-    this.spec = new Spec(this.request, this.config)
-    this.portal = new Portal(this.request, this.config)
+    this.spec = new Spec(this.request, config)
+    this.portal = new Portal(this.request, config)
   }
 
   async login () {
