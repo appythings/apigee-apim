@@ -37,7 +37,7 @@ class Portal {
         'isPublic': false,
         'authEntitled': true,
         'explicitAudiences': [],
-        'orgname': this.organization``
+        'orgname': this.organization
       })
       await this.request.put(`/portals/api/sites/${this.organization}-${portal}/apidocs/${id}/snapshot`, {})
     } else {
