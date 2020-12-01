@@ -8,5 +8,6 @@ module.exports = async (config, spec, product, portal) => {
   const swagger = JSON.parse(fs.readFileSync(spec))
 
   const specification = await apigee.spec.createOrUpdateSwagger(swagger)
-  return apigee.portal.publishSpecToPortal(swagger, specification, product, portal)
+  await apigee.portal.publishSpecToPortal(swagger, specification, product, portal)
+  console.log(`Deployed spec for product "${product}" to portal "${portal}"`)
 }
