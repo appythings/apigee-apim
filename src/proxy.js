@@ -23,6 +23,12 @@ module.exports = {
       }
     })
   },
+  deployExistingRevision: async (config, name, revision) => {
+    const apigee = new Apigee(config)
+    const deployment = await apigee.proxy.deploy(name, revision)
+    console.log(`Deployed proxy "${name}" revision "${revision}"`)
+    return deployment
+  },
   listDeployedRevision: async (config, name) => {
     const apigee = new Apigee(config)
     const deployment = await apigee.proxy.deployment(name)

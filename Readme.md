@@ -69,3 +69,24 @@ caches:
     overflowToDisk: true/false
     skipCacheIfElementSizeInKBExceeds: {num_elements}
 ```
+# Proxies
+
+## deploy
+Call this from the directory above 'apiproxy' or specify a different directory using -d
+```
+apigee-apim deploy -n <apiName> --org <org> --env <env>
+```
+## deploy existing revision
+```
+apigee-apim deployExistingRevision -n <apiName> -r <rev> --org <org> --env <env>
+```
+## list currently deployed revision
+```
+apigee-apim listDeployedRevision -n <apiName> --org <org> --env <env>
+```
+
+# Spec API
+This functionality is in alpha release and is only available for orgs that have this enabled.
+```
+apigee-apim deploySpec -s <spec> -a <apiproduct> -p <portal> --org <org> --env <env>
+```

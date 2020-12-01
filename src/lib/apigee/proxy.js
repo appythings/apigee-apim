@@ -43,7 +43,11 @@ class Proxy {
       method: 'POST',
       data: Proxy
     })
-    await this.request.post(`/organizations/${this.config.organization}/environments/${this.config.environment}/apis/${name}/revisions/${response.data.revision}/deployments?override=true`, {})
+    return this.deploy(name, response.data.revision)
+  }
+
+  async deploy (name, revision) {
+    return this.request.post(`/organizations/${this.config.organization}/environments/${this.config.environment}/apis/${name}/revisions/${revision}/deployments?override=true`, {})
   }
 
   async delete (name) {
