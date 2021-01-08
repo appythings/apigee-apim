@@ -85,4 +85,9 @@ program.command('listDeployedRevision')
   .description('lists the currently deployed revision for an API on an environment')
   .action((options) => listDeployedRevision(build(), options.api).catch(handleError))
 
+program.command('listAPIProducts')
+    .requiredOption('-o, --org <org>', 'The name of the Apigee organization.')
+    .description('lists the products in the Apigee organization')
+    .action((options) => listAPIProducts(build(), options.api).catch(handleError))
+
 program.parse(process.argv)

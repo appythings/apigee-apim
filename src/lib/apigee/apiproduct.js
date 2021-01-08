@@ -11,13 +11,9 @@ class Apiproduct {
     this.request = request
   }
 
-  async list (environment) {
-    const response = await this.request(`/organizations/${this.config.organization}/apiproducts?expand=true`)
-    return response.data.apiProduct.filter(product => product.environments.indexOf(environment) > -1)
-      .map(product => {
-        product.environments = [environment]
-        return product
-      })
+  async listAPIProducts () {
+    const response = await this.request(`/organizations/${this.config.organization}/apiproducts`)
+    return response.data;
   }
 
   async detail (name) {
