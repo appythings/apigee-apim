@@ -11,7 +11,7 @@ class Apiproduct {
     this.request = request
   }
 
-  async listAPIProducts () {
+  async list () {
     const response = await this.request(`/organizations/${this.config.organization}/apiproducts`)
     return response.data;
   }

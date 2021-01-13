@@ -8,6 +8,7 @@ const updateCache = require('./cache')
 const { deployProxy, deployExistingRevision, listDeployedRevision } = require('./proxy')
 const deploySharedFlow = require('./sharedFlow')
 const deploySpec = require('./portal')
+const listAPIProducts = require ('./listapiproducts')
 
 function handleError (e) {
   console.error('ERROR:')
