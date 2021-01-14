@@ -6,5 +6,5 @@ const fs = require('fs')
 module.exports = async (config, manifest) => {
   const apigee = new Apigee(config)
   const products = await apigee.apiproduct.list()
-  console.log(products);
+  console.log(JSON.stringify(products));
 }
