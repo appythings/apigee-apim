@@ -24,6 +24,11 @@ products:
     proxies:
       - apigee-account-proxy-v1
 ```
+List all products in an org:
+```
+apigee-apim listAPIProducts --org <org>
+```
+
 # KVMS
 ```
 apigee-apim kvms kvms.yaml --org <org> --env test 

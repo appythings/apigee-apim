@@ -8,6 +8,7 @@ const updateCache = require('./cache')
 const { deployProxy, deployExistingRevision, listDeployedRevision } = require('./proxy')
 const deploySharedFlow = require('./sharedFlow')
 const deploySpec = require('./portal')
+const listAPIProducts = require ('./listapiproducts')
 
 function handleError (e) {
   console.error('ERROR:')
@@ -34,7 +35,7 @@ const build = () => {
 program.name(name)
   .version(version, '-v, --version')
   .description(description)
-  .option('-o, --org <org>', 'apigee org')
+  .requiredOption('-o, --org <org>', 'apigee org')
   .option('-e, --env <env>', 'apigee env')
   .option('-h, --hybrid <accessToken>', 'specify if you wish to deploy to Apigee hybrid')
   .option('-L, --baseuri <baseuri>', ' The base URI for you organization on Apigee Edge. The default is the base URI for Apigee cloud deployments is api.enterprise.apigee.com. For on-premise deployments, the base URL may be different.')
@@ -84,5 +85,9 @@ program.command('listDeployedRevision')
   .requiredOption('-n, --api <name>', 'The name of the API proxy. Note: The name of the API proxy must be unique within an organization. The characters you are allowed to use in the name are restricted to the following: A-Z0-9._\\-$ %.')
   .description('lists the currently deployed revision for an API on an environment')
   .action((options) => listDeployedRevision(build(), options.api).catch(handleError))
+
+program.command('listAPIProducts')
+  .description('lists the products in the Apigee organization')
+  .action((options) => listAPIProducts(build(), options.api).catch(handleError))
 
 program.parse(process.argv)
