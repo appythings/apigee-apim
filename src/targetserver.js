@@ -28,7 +28,7 @@ module.exports = async (config, manifest) => {
       'name': targetServer.name,
       'host': targetServer.host,
       'isEnabled': true,
-      'port': 443 || targetServer.port,
+      'port': targetServer.port || 443,
       'sSLInfo': {
         'enabled': !(targetServer.sSLInfo && targetServer.sSLInfo.enabled === false),
         'clientAuthEnabled': (targetServer.sSLInfo && targetServer.sSLInfo.clientAuthEnabled),

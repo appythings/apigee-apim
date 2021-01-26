@@ -49,6 +49,9 @@ targetServers.yaml
 targetServers:
   - name: google
     host: google2.com
+  - name: google1
+    host: google1.com
+    port: 8080
   - name: google2
     host: google2.com
     sSLInfo:
