@@ -68,7 +68,8 @@ apigee-apim caches caches.yaml --org <org> --env test
 caches.yaml
 ```
 caches:
-  - description: cache-1
+  - name: cache-1
+    description: cache-1
     expirySettings:
         valuesNull: true/false
     timeoutInSec: {sec}
