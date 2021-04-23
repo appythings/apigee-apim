@@ -13,7 +13,7 @@ const validateDate = (cache) => {
     'timeOfDay': { 'value': cache.timeOfDay },
     'timeoutInSec': { 'value': cache.timeoutInSec },
     'expiryDate': { 'value': cache.expiryDate },
-    'valuesNull': cache.expirySettings.valuesNull
+    'valuesNull': cache.expirySettings ? cache.expirySettings.valuesNull : false
   }
 }
 
