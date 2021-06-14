@@ -99,3 +99,11 @@ This functionality is in alpha release and is only available for orgs that have 
 ```
 apigee-apim deploySpec -s <spec> -a <apiproduct> -p <portal> --org <org> --env <env>
 ```
+
+# Developer Apps 
+
+## Custom attributes
+Call this from command line when globally installed to upsert a custom attribute
+```
+ apigee-apim updateCustomAttribute --org <org> --dev <developer> --app <appName> --attributeName <attributeName> --attributeValue <attributeValue>
+```
