@@ -11,6 +11,7 @@ const Resource = require('./apigee/resource')
 const Apiproduct = require('./apigee/apiproduct')
 const Spec = require('./specs-api/spec')
 const Portal = require('./specs-api/portal')
+const DeveloperApps = require('./apigee/developerApps')
 
 class Apigee {
   constructor (config) {
@@ -36,6 +37,7 @@ class Apigee {
     this.apiproduct = new Apiproduct(this.request, config)
     this.spec = new Spec(this.request, config)
     this.portal = new Portal(this.request, config)
+    this.developerApps = new DeveloperApps(this.request, config)
   }
 
   async login () {
@@ -65,6 +67,7 @@ class Apigee {
     this.apiproduct.setRequest(this.request)
     this.spec.setRequest(this.request)
     this.portal.setRequest(this.request)
+    this.developerApps.setRequest(this.request)
   }
 }
 

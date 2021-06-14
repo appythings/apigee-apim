@@ -9,6 +9,7 @@ const { deployProxy, deployExistingRevision, listDeployedRevision } = require('.
 const deploySharedFlow = require('./sharedFlow')
 const deploySpec = require('./portal')
 const listAPIProducts = require('./listapiproducts')
+const developerApps = require('./developerApps')
 
 function handleError (e) {
   console.error('ERROR:')
@@ -42,30 +43,32 @@ program.name(name)
   .option('-t, --token <accessToken>', ' Your Apigee access token. Use this in lieu of -u / -p')
 
 program.command('products <manifest>')
-  .description('creates or updates a list of products based on the given manifest')
+  .description('Creates or updates a list of products based on the given manifest')
   .action((manifest) => updateProducts(build(), manifest).catch(handleError))
 
 program.command('kvms <manifest>')
+  .description( 'Create or updates KVMs')
   .option('--purgeDeleted', 'Deletes all entries in the KVM that are not in the Manifest.', false)
   .action((manifest, command) => updateKvms(build(), manifest).catch(handleError))
 
 program.command('targetservers <manifest>')
-  .action((manifest, command) => targetserver(build(), manifest).catch(handleError))
+    .description('Creates or updates target servers')
+    .action((manifest, command) => targetserver(build(), manifest).catch(handleError))
 
 program.command('caches <manifest>')
-  .description('creates or updates a list of caches based on the given manifest')
+  .description('Creates or updates a list of caches based on the given manifest')
   .action((manifest) => updateCache(build(), manifest).catch(handleError))
 
 program.command('deploy')
   .requiredOption('-n, --api <name>', 'The name of the API proxy. Note: The name of the API proxy must be unique within an organization. The characters you are allowed to use in the name are restricted to the following: A-Z0-9._\\-$ %.')
   .option('-d, --directory <directory>', 'The path to the root directory of the API proxy on your local system. Will attempt to use current directory is none is specified.', 'apiproxy')
-  .description('deploy a proxy based on a folder')
+  .description('Deploy a proxy based on a folder')
   .action((options) => deployProxy(build(), options.api, options.directory).catch(handleError))
 
 program.command('deployExistingRevision')
   .requiredOption('-n, --api <name>', 'The name of the API proxy. Note: The name of the API proxy must be unique within an organization. The characters you are allowed to use in the name are restricted to the following: A-Z0-9._\\-$ %.')
   .requiredOption('-r, --revision <revision>', 'The existing revision of the proxy to be deployed.')
-  .description('deploy a proxy based on a folder')
+  .description('Deploy a proxy based on a folder')
   .action((options) => deployExistingRevision(build(), options.api, options.revision).catch(handleError))
 
 program.command('deploySharedFlow')
@@ -83,11 +86,19 @@ program.command('deploySpec')
 
 program.command('listDeployedRevision')
   .requiredOption('-n, --api <name>', 'The name of the API proxy. Note: The name of the API proxy must be unique within an organization. The characters you are allowed to use in the name are restricted to the following: A-Z0-9._\\-$ %.')
-  .description('lists the currently deployed revision for an API on an environment')
+  .description('Lists the currently deployed revision for an API on an environment')
   .action((options) => listDeployedRevision(build(), options.api).catch(handleError))
 
 program.command('listAPIProducts')
-  .description('lists the products in the Apigee organization')
+  .description('Lists the products in the Apigee organization')
   .action((options) => listAPIProducts(build(), options.api).catch(handleError))
+
+program.command('updateCustomAttribute')
+    .description('Update a custom attribute by developer and app name.')
+    .requiredOption('--dev <dev>', 'Name of the developer')
+    .requiredOption('--app <app>', 'Name of the app')
+    .requiredOption('-an, --attributeName <attributeName>', 'Name of the attribute')
+    .requiredOption('-av, --attributeValue <attributeValue>', 'Value of the attribute')
+    .action((options) => developerApps.updateCustomAttribute(build(), options.dev, options.app, options.attributeName, options.attributeValue).catch(handleError))
 
 program.parse(process.argv)
