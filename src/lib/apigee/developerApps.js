@@ -19,17 +19,7 @@ class DeveloperApps {
   }
 
   async getCustomAttribute(developer, app, attributeName) {
-    console.log(`/organizations/${this.config.organization}/developers/${developer}/apps/${app}/attributes/${attributeName}`);
-    try {
-      const customAttributes = await this.request.get(`/organizations/${this.config.organization}/developers/${developer}/apps/${app}/attributes/${attributeName}`)
-      console.log(customAttributes.data.value)
-    } catch (e) {
-      if (e.response.status = '404') {
-        console.log('Custom attribute does not exist')
-      } else{
-        console.log(e)
-      }
-    }
+      return this.request.get(`/organizations/${this.config.organization}/developers/${developer}/apps/${app}/attributes/${attributeName}`)
   }
 
   async updateCustomAttribute(developer, app, attributeName, attributeValue) {
