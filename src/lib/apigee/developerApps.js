@@ -8,13 +8,27 @@ class DeveloperApps {
     this.request = request
   }
 
-  async getCustomAttributes (developer, app) {
+  async getCustomAttributes(developer, app) {
     try {
       const customAttributes =  this.request.get(`/organizations/${this.config.organization}/developers/${developer}/apps/${app}/attributes`)
       return customAttributes
     } catch (e) {
       console.log('Something went wrong while getting custom attributes.')
       console.log(e)
+    }
+  }
+
+  async getCustomAttribute(developer, app, attributeName) {
+    console.log(`/organizations/${this.config.organization}/developers/${developer}/apps/${app}/attributes/${attributeName}`);
+    try {
+      const customAttributes = await this.request.get(`/organizations/${this.config.organization}/developers/${developer}/apps/${app}/attributes/${attributeName}`)
+      console.log(customAttributes.data.value)
+    } catch (e) {
+      if (e.response.status = '404') {
+        console.log('Custom attribute does not exist')
+      } else{
+        console.log(e)
+      }
     }
   }
 
