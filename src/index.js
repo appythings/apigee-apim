@@ -101,4 +101,11 @@ program.command('updateCustomAttribute')
     .requiredOption('-av, --attributeValue <attributeValue>', 'Value of the attribute')
     .action((options) => developerApps.updateCustomAttribute(build(), options.dev, options.app, options.attributeName, options.attributeValue).catch(handleError))
 
+program.command('getCustomAttributeValue')
+    .description('Get custom attribute value by developer and app and attribute name.')
+    .requiredOption('--dev <dev>', 'Name of the developer')
+    .requiredOption('--app <app>', 'Name of the app')
+    .requiredOption('-an, --attributeName <attributeName>', 'Name of the attribute')
+    .action((options) => developerApps.getCustomAttributeValue(build(), options.dev, options.app, options.attributeName).catch(handleError))
+
 program.parse(process.argv)

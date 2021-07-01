@@ -8,7 +8,7 @@ class DeveloperApps {
     this.request = request
   }
 
-  async getCustomAttributes (developer, app) {
+  async getCustomAttributes(developer, app) {
     try {
       const customAttributes =  this.request.get(`/organizations/${this.config.organization}/developers/${developer}/apps/${app}/attributes`)
       return customAttributes
@@ -16,6 +16,10 @@ class DeveloperApps {
       console.log('Something went wrong while getting custom attributes.')
       console.log(e)
     }
+  }
+
+  async getCustomAttribute(developer, app, attributeName) {
+      return this.request.get(`/organizations/${this.config.organization}/developers/${developer}/apps/${app}/attributes/${attributeName}`)
   }
 
   async updateCustomAttribute(developer, app, attributeName, attributeValue) {
