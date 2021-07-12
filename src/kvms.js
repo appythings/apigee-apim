@@ -39,7 +39,7 @@ module.exports = async (config, manifest, purgeDeleted) => {
 
     try {
       await apigee.kvm.detail(kvmName)
-      await apigee.kvm.update(newkvm)
+      await apigee.kvm.update(newkvm, purgeDeleted)
       console.log('Updated kvm: ' + newkvm.name)
     } catch (e) {
       if (e.message.includes('404')) {

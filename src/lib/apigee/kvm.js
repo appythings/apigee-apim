@@ -24,11 +24,11 @@ class Kvm {
     return this.request.post(`/organizations/${this.config.organization}/environments/${this.config.environment}/keyvaluemaps`, Kvm)
   }
 
-  async update (Kvm) {
+  async update (Kvm, purgeDeleted) {
     const current = await this.detail(Kvm.name)
     const updatePromises = current.entry.map(entry => {
       const updatedEntry = Kvm.entry.find(newEntry => newEntry.name === entry.name)
-      if (!updatedEntry) {
+      if (!updatedEntry && purgeDeleted) {
         return this.removeEntry(Kvm, entry)
       }
       if (updatedEntry.value !== entry.value) {
