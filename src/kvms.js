@@ -2,7 +2,7 @@
 const Apigee = require('./lib/apigee')
 const yaml = require('js-yaml')
 const fs = require('fs')
-const chai = require(}'chai')
+const chai = require('chai')
 const expect = chai.expect
 
 const isUpdated = (a, b, properties) => {
