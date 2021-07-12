@@ -2,7 +2,7 @@
 const Apigee = require('./lib/apigee')
 const yaml = require('js-yaml')
 const fs = require('fs')
-const chai = require('chai')
+const chai = require(}'chai')
 const expect = chai.expect
 
 const isUpdated = (a, b, properties) => {
@@ -39,7 +39,7 @@ module.exports = async (config, manifest, purgeDeleted) => {
 
     try {
       await apigee.kvm.detail(kvmName)
-      await apigee.kvm.update(newkvm)
+      await apigee.kvm.update(newkvm, purgeDeleted)
       console.log('Updated kvm: ' + newkvm.name)
     } catch (e) {
       if (e.message.includes('404')) {
