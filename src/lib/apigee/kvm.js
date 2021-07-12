@@ -28,9 +28,13 @@ class Kvm {
     const current = await this.detail(Kvm.name)
     const updatePromises = current.entry.map(entry => {
       const updatedEntry = Kvm.entry.find(newEntry => newEntry.name === entry.name)
-      if (!updatedEntry && purgeDeleted) {
-        return this.removeEntry(Kvm, entry)
-      }
+      if (!updatedEntry) {​
+		if(purgeDeleted){​
+			return this.removeEntry(Kvm, entry)
+		} ​else{​
+			return
+		}	​
+	  }
       if (updatedEntry.value !== entry.value) {
         return this.updateEntry(Kvm, updatedEntry)
       }
