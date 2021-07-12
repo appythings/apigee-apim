@@ -49,7 +49,7 @@ program.command('products <manifest>')
 program.command('kvms <manifest>')
   .description( 'Create or updates KVMs')
   .option('--purgeDeleted', 'Deletes all entries in the KVM that are not in the Manifest.', false)
-  .action((manifest, command,options) => updateKvms(build(), manifest,options.purgeDeleted).catch(handleError))
+  .action((manifest, options) => updateKvms(build(), manifest,options.purgeDeleted).catch(handleError))
 
 program.command('targetservers <manifest>')
     .description('Creates or updates target servers')
