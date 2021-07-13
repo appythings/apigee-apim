@@ -37,8 +37,20 @@ kvms.yaml
 ```
 kvms:
   test1:
-    key2: value1
-    key3: value9
+    key2: "{environmentvariable}"
+    key3: "{environmentvariable2}"
+    key4: "plain-variable"
+```
+For encrypted kvms:
+
+kvms.yaml
+```
+kvms:
+  test1:
+    encrypted: true
+    key2: "{environmentvariable}"
+    key3: "{environmentvariable2}"
+    key4: "plain-variable"
 ```
 # Target Servers
 ```

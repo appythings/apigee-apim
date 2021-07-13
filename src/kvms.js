@@ -15,6 +15,14 @@ const isUpdated = (a, b, properties) => {
   })
 }
 
+const getValue = (val) => {
+  const envVar = val.match(/{(.*)}/)
+  if (envVar) {
+    return process.env[envVar[1]]
+  }
+  return val
+}
+
 module.exports = async (config, manifest, purgeDeleted) => {
   const apigee = new Apigee(config)
   let yml = yaml.safeLoad(fs.readFileSync(manifest, 'utf8'))
@@ -29,12 +37,13 @@ module.exports = async (config, manifest, purgeDeleted) => {
   Object.keys(kvmConfig).map(async (kvmName) => {
     const kvm = kvmConfig[kvmName]
     expect(kvm, 'The KVM value is not an object').to.be.an('object')
+    const encrypted = kvm.encrypted === 'true' || kvm.encrypted === true
+    delete kvm.encrypted
 
     const newkvm = {
       'name': kvmName,
-      'encrypted': false,
-      // 'scope': 'ENV',
-      'entry': Object.keys(kvm).map(key => ({'name': key, 'value': kvm[key]}))
+      'encrypted': encrypted,
+      'entry': Object.keys(kvm).map(key => ({ 'name': key, 'value': getValue(kvm[key]) }))
     }
 
     try {
@@ -43,7 +52,7 @@ module.exports = async (config, manifest, purgeDeleted) => {
       console.log('Updated kvm: ' + newkvm.name)
     } catch (e) {
       if (e.message.includes('404')) {
-        try{
+        try {
           await apigee.kvm.add(newkvm)
         } catch (e) {
           console.log(e.response.data)
