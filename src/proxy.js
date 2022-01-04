@@ -20,7 +20,11 @@ module.exports = {
         await apigee.proxy.add(fs.createReadStream('apiproxy.zip'), name)
       } catch (e) {
         process.exitCode = 1
-        console.log(JSON.stringify(e.response.data))
+        if (e.response) {
+          console.log(JSON.stringify(e.response.data))
+        } else {
+          console.log(e.message)
+        }
       }
     })
   },
@@ -49,7 +53,7 @@ module.exports = {
       writeStream.on('finish', () => {
         writeStream.end()
         fs.createReadStream(`${proxy}/apiproxy.zip`)
-          .pipe(unzipper.Extract({ path: `${proxy}` }));
+          .pipe(unzipper.Extract({ path: `${proxy}` }))
       })
     })
   }
