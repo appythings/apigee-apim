@@ -15,8 +15,8 @@ class Proxy {
 
   async detail (name) {
     try {
-      const deployment = await this.request(`/organizations/${this.config.organization}/environments/${this.config.environment}/apis/${name}/deployments`)
-      const revision = deployment.data.revision.find((rev) => rev.state === 'deployed')
+      const deployment = await this.request(`/organizations/${this.config.organization}/apis/${name}/deployments`)
+      const revision = deployment.data.environment[1].revision.find((rev) => rev.state === 'deployed')
       const response = await this.request(
         {
           url: `/organizations/${this.config.organization}/apis/${name}/revisions/${revision.name}?format=bundle`,

@@ -28,7 +28,7 @@ class TargetServer {
 
   async update (TargetServer) {
     try {
-      await this.request.post(`/organizations/${this.config.organization}/environments/${this.config.environment}/targetservers/${TargetServer.name}`, TargetServer)
+      await this.request.put(`/organizations/${this.config.organization}/environments/${this.config.environment}/targetservers/${TargetServer.name}`, TargetServer)
     } catch (e) {
       console.log(e)
     }
