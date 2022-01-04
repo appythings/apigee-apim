@@ -2,6 +2,7 @@
 const Apigee = require('./lib/apigee')
 const fs = require('fs-extra')
 const archiver = require('archiver')
+const unzipper = require('unzipper')
 
 module.exports = {
   deployProxy: async (config, name, directory) => {
@@ -34,6 +35,23 @@ module.exports = {
     const deployment = await apigee.proxy.deployment(name)
     console.log(deployment.name)
     return deployment
+  },
+  downloadProxies: async (config, list = []) => {
+    const apigee = new Apigee(config)
+    if (list.length === 0) {
+      list = await apigee.proxy.list()
+    }
+    list.forEach(async (proxy) => {
+      const proxyZip = await apigee.proxy.detail(proxy)
+      await fs.ensureDir(proxy)
+      let writeStream = fs.createWriteStream(`${proxy}/apiproxy.zip`)
+      proxyZip.pipe(writeStream)
+      writeStream.on('finish', () => {
+        writeStream.end()
+        fs.createReadStream(`${proxy}/apiproxy.zip`)
+          .pipe(unzipper.Extract({ path: `${proxy}` }));
+      })
+    })
   }
 
 }
