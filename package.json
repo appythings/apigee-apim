@@ -21,6 +21,7 @@
     "http": "^0.0.1-security",
     "https-proxy-agent": "^5.0.0",
     "js-yaml": "^3.14.0",
+    "keepalive-proxy-agent": "^1.2.2",
     "standard": "^11.0.1",
     "unzipper": "^0.10.11",
     "yargs": "^15.4.1"
