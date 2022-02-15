@@ -27,8 +27,7 @@ const build = () => {
     environment: program.env,
     username: process.env.APIGEE_USERNAME || process.env.APIGEE_USER,
     password: process.env.APIGEE_PASSWORD,
-    proxy_url: process.env.PROXY_URL,
-    proxy_port: process.env.PROXY_PORT,
+    proxy: process.env.http_proxy,
     url: program.baseuri ? program.baseuri
       : program.hybrid ? 'https://apigee.googleapis.com/v1' : 'https://api.enterprise.apigee.com/v1',
     token: program.token

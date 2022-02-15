@@ -14,7 +14,7 @@ const Spec = require('./specs-api/spec')
 const Portal = require('./specs-api/portal')
 const DeveloperApps = require('./apigee/developerApps')
 
-const httpsAgent = new HttpsProxyAgent({host: '${config.proxy_url}', port: '${config.proxy_port}'})
+const httpsAgent = new HttpsProxyAgent('${config.proxy}')
 
 class Apigee {
   constructor (config) {
