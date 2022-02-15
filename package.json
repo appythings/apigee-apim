@@ -16,6 +16,7 @@
     "cucumber": "^5.1.0",
     "form-data": "^3.0.0",
     "fs-extra": "^8.1.0",
+    "https-proxy-agent": "^5.0.0",
     "js-yaml": "^3.14.0",
     "standard": "^11.0.1",
     "unzipper": "^0.10.11",
