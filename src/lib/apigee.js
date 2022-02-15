@@ -1,4 +1,5 @@
 const axios = require('axios')
+const HttpsProxyAgent = require("https-proxy-agent")
 const qs = require('qs')
 const fs = require('fs-extra')
 const Cache = require('./apigee/cache')
@@ -13,10 +14,13 @@ const Spec = require('./specs-api/spec')
 const Portal = require('./specs-api/portal')
 const DeveloperApps = require('./apigee/developerApps')
 
+const httpsAgent = new HttpsProxyAgent({host: "http://webproxy.lhr4.dqs.booking.com", port: "3128"})
+
 class Apigee {
   constructor (config) {
     this.config = config
     this.request = axios.create({
+      httpsAgent,
       baseURL: config.url,
       timeout: 60000,
       headers: {
