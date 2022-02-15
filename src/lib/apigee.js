@@ -22,8 +22,7 @@ class Apigee {
     this.config = config
     /*const httpsAgent = new HttpsProxyAgent(config.proxy)*/
     this.request = axios.create({
-      httpAgent: new http.Agent({ keepAlive: true }),
-      proxy:config.proxy,
+      httpAgent: new http.Agent({ proxy:true,url:config.proxy, keepAlive: true }),  
       baseURL: config.url,
       timeout: 60000,
       headers: {
