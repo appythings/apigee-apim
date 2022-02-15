@@ -23,13 +23,14 @@ class Apigee {
     const httpsAgent = new HttpsProxyAgent(config.proxy)
     this.request = axios.create({
       /*httpAgent: new http.Agent({ proxy:true,url:config.proxy, keepAlive: true }),*/
-      agent: httpsAgent,
+      httpsAgent,
       baseURL: config.url,
       timeout: 60000,
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         'X-Org-Name': config.organization,
+        'Connection': 'keep-alive',
         Authorization: config.token ? `Bearer ${config.token}`
           : config.hybrid ? `Bearer ${config.hybrid}` : 'Basic ' + Buffer.from(`${this.config.username}:${this.config.password}`).toString('base64')
       }
