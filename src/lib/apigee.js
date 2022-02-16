@@ -20,7 +20,7 @@ const DeveloperApps = require('./apigee/developerApps')
 class Apigee {
   constructor (config) {
     this.config = config
-    const Agent = new HttpsProxyAgent({proxy:{hostname:'${config.proxy_url}',port:'${config.proxy_port}'}})
+    const Agent = new HttpsProxyAgent({proxy:{hostname:"config.proxy_url",port:"config.proxy_port"}})
     this.request = axios.create({
       httpsAgent: Agent,
       baseURL: config.url,
