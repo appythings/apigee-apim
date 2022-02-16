@@ -21,7 +21,7 @@ class Apigee {
   constructor (config) {
     this.config = config
     const Agent = new HttpsProxyAgent() /*{proxy:{hostname:config.proxy_url,port:3128}})*/
-    let options = {hostname:config.proxy_url,port:config.proxy_port, agent: Agent, rejectUnauthorized: false}
+    let options = {hostname:"http://webproxy.corp.booking.com",port:config.proxy_port, agent: Agent, rejectUnauthorized: false}
     this.request = axios.create({
       options,
       baseURL: config.url,
