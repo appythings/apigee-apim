@@ -20,7 +20,7 @@ const DeveloperApps = require('./apigee/developerApps')
 class Apigee {
   constructor (config) {
     this.config = config
-    const HttpAgent = new HttpsProxyAgent() /*{proxy:{hostname:config.proxy_url,port:3128}})*/
+    const HttpAgent = new HttpsProxyAgent()
     let options = {hostname:config.proxy_url,port:config.proxy_port, agent: HttpAgent, rejectUnauthorized: false}
     this.request = axios.create({
       agent: options,
@@ -30,7 +30,6 @@ class Apigee {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         'X-Org-Name': config.organization,
-        'Connection': 'keep-alive',
         Authorization: config.token ? `Bearer ${config.token}`
           : config.hybrid ? `Bearer ${config.hybrid}` : 'Basic ' + Buffer.from(`${this.config.username}:${this.config.password}`).toString('base64')
       }
