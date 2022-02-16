@@ -15,7 +15,6 @@ const Spec = require('./specs-api/spec')
 const Portal = require('./specs-api/portal')
 const DeveloperApps = require('./apigee/developerApps')
 
-import HttpsProxyAgent from 'https-proxy-agent'
 
 class Apigee {
   constructor (config) {
