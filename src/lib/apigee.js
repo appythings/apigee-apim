@@ -20,8 +20,6 @@ import HttpsProxyAgent from 'https-proxy-agent'
 class Apigee {
   constructor (config) {
     this.config = config
-    const HttpAgent = new HttpsProxyAgent()
-    let options = {hostname:config.proxy_url,port:config.proxy_port, agent: HttpAgent, rejectUnauthorized: false, protocol: "https"}
     this.request = axios.create({
       httpsAgent: new HttpsProxyAgent(process.env.HTTPS_PROXY),
       proxy: false,
