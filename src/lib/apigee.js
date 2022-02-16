@@ -24,13 +24,14 @@ class Apigee {
     let options = {hostname:config.proxy_url,port:config.proxy_port, agent: Agent, rejectUnauthorized: false}
     this.request = axios.create({
       options,
-      baseURL: "https://httpbin.org/status/300" /*config.url*/,
+      baseURL: config.url,
       timeout: 60000,
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         'X-Org-Name': config.organization,
         'Connection': 'keep-alive',
+        'User-Agent': 'Chrome',
         Authorization: config.token ? `Bearer ${config.token}`
           : config.hybrid ? `Bearer ${config.hybrid}` : 'Basic ' + Buffer.from(`${this.config.username}:${this.config.password}`).toString('base64')
       }
