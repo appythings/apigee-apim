@@ -1,5 +1,5 @@
 const axios = require('axios')
-const HttpsProxyAgent = require("keepalive-proxy-agent")
+const HttpsProxyAgent = require("https-proxy-agent")
 const http = require('http');
 const qs = require('qs')
 const fs = require('fs-extra')
@@ -15,7 +15,7 @@ const Spec = require('./specs-api/spec')
 const Portal = require('./specs-api/portal')
 const DeveloperApps = require('./apigee/developerApps')
 
-
+import HttpsProxyAgent from 'https-proxy-agent'
 
 class Apigee {
   constructor (config) {
@@ -23,7 +23,8 @@ class Apigee {
     const HttpAgent = new HttpsProxyAgent()
     let options = {hostname:config.proxy_url,port:config.proxy_port, agent: HttpAgent, rejectUnauthorized: false, protocol: "https"}
     this.request = axios.create({
-      /*agent: options,*/
+      httpsAgent: new HttpsProxyAgent(process.env.HTTPS_PROXY),
+      proxy: false,
       baseURL: config.url,
       timeout: 60000,
       headers: {
