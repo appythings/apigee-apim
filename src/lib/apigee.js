@@ -25,7 +25,7 @@ class Apigee {
       /*httpsAgent: HttpAgent,*/
       proxy: false,
       baseURL: config.url,
-      timeout: 120000,
+      timeout: 240000,
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
