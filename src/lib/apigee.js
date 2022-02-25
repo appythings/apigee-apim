@@ -27,7 +27,6 @@ class Apigee {
     this.request = axios.create({
       options,
       proxy: false,
-      port: 443,
       baseURL: config.url,
       timeout: 120000,
       headers: {
