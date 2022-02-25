@@ -26,7 +26,7 @@ class Apigee {
       proxy: false*/
     const HttpAgent = new HttpsProxyAgent({host:config.proxy_url,port:config.proxy_port})
     let options = {agent: HttpAgent, rejectUnauthorized: false}
-    this.request = axios.create({,
+    this.request = axios.create({
       baseURL: config.url,
       timeout: 120000,
       headers: {
