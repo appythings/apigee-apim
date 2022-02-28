@@ -20,9 +20,9 @@ class Apigee {
   constructor (config) {
     this.config = config
     if (typeof config.proxy_url !== 'undefined') {
-      let HttpAgent = new HttpsProxyAgent({host:config.proxy_url,port:config.proxy_port})
+      const HttpAgent = new HttpsProxyAgent({host:config.proxy_url,port:config.proxy_port})
     } else {
-      let HttpAgent = new http.Agent();
+      const HttpAgent = new http.Agent();
     }
     this.request = axios.create({
       HttpAgent,
