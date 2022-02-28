@@ -18,8 +18,8 @@ const DeveloperApps = require('./apigee/developerApps')
 class Apigee {
   constructor (config) {
     this.config = config
-    if (config.proxy_url) {
-    const HttpAgent = new HttpsProxyAgent({host:config.proxy_url,port:config.proxy_port})
+    if (typeof config.proxy_url !== 'undefined') {
+      const HttpAgent = new HttpsProxyAgent({host:config.proxy_url,port:config.proxy_port})
     } else {
       let agent
       const HttpAgent = agent
@@ -27,7 +27,7 @@ class Apigee {
     this.request = axios.create({
       HttpAgent,
       baseURL: config.url,
-      timeout: 120000,
+      timeout: 60000,
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
