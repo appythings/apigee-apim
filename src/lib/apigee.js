@@ -15,14 +15,14 @@ const Spec = require('./specs-api/spec')
 const Portal = require('./specs-api/portal')
 const DeveloperApps = require('./apigee/developerApps')
 
+
 class Apigee {
   constructor (config) {
     this.config = config
     if (typeof config.proxy_url !== 'undefined') {
-      const HttpAgent = new HttpsProxyAgent({host:config.proxy_url,port:config.proxy_port})
+      let HttpAgent = new HttpsProxyAgent({host:config.proxy_url,port:config.proxy_port})
     } else {
-      let agent
-      const HttpAgent = agent
+      let HttpAgent = agent
     }
     this.request = axios.create({
       HttpAgent,
