@@ -3,10 +3,19 @@ Run the following commands to install:
 ```
 npm install apigee-apim -g
 ```
-Set environment variables (powershell)
+Set environment variables 
 ```
-$env:APIGEE_USERNAME=""
-$env:APIGEE_PASSWORD=""
+APIGEE_USERNAME=""
+APIGEE_PASSWORD=""
+```
+
+## proxy setup
+
+When behind a proxy setup the following environment variables.
+
+```
+proxy_host="example.com"
+proxy_port="1234"
 ```
 
 # Products
