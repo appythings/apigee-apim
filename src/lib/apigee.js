@@ -20,7 +20,7 @@ class Apigee {
   constructor (config) {
     this.config = config
     if (config.proxy_url) {
-      var HttpAgent = new HttpsProxyAgent({host:config.proxy_url,port:config.proxy_port})
+      var HttpAgent = new HttpsProxyAgent({host:config.proxy_host,port:config.proxy_port})
     } else {
       var HttpAgent = new http.Agent();
     } 
