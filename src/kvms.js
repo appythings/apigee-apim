@@ -41,12 +41,12 @@ module.exports = async (config, manifest, purgeDeleted) => {
     delete kvm.encrypted
 
     if (apigee.config.hybrid) {
-      var newkvm = {
+      let newkvm = {
         'name': kvmName,
         'encrypted': true
       }
     } else {  
-      var newkvm = {
+      let newkvm = {
         'name': kvmName,
         'encrypted': encrypted,
         'entry': Object.keys(kvm).map(key => ({ 'name': key, 'value': getValue(kvm[key]) }))
