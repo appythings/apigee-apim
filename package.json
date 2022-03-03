@@ -1,24 +1,39 @@
 {
   "name": "apigee-apim",
-  "bin": "src/index.js",
-  "version": "0.1.27",
-  "description": "",
+  "bin": {
+    "apigee-apim": "src/index.js"
+  },
+  "version": "0.1.2-7.1",
+  "description": "Run the following commands to install:\r ```\r npm install apigee-apim -g\r ```\r Set environment variables (powershell)\r ```\r $env:APIGEE_USERNAME=\"\"\r $env:APIGEE_PASSWORD=\"\"\r ```",
   "main": "src/index.js",
   "author": "",
   "license": "ISC",
   "dependencies": {
     "api-spec-converter": "^2.10.1",
     "archiver": "^5.0.2",
-    "axios": "^0.18.0",
+    "axios": "^0.26.0",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "commander": "^6.0.0",
     "cucumber": "^5.1.0",
     "form-data": "^3.0.0",
     "fs-extra": "^8.1.0",
+    "http": "^0.0.1-security",
+    "https-proxy-agent": "^5.0.0",
     "js-yaml": "^3.14.0",
     "standard": "^11.0.1",
     "unzipper": "^0.10.11",
     "yargs": "^15.4.1"
-  }
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jnbalker/apigee-apim.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jnbalker/apigee-apim/issues"
+  },
+  "homepage": "https://github.com/jnbalker/apigee-apim#readme"
 }
