@@ -24,8 +24,8 @@ APIGEE_PASSWORD=""
 When behind a proxy setup the following environment variables.
 
 ```
-proxy_host="example.com"
-proxy_port=1234
+PROXY_HOST="example.com"
+PROXY_PORT=1234
 ```
 
 ## Repository
