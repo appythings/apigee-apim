@@ -181,6 +181,20 @@ caches:
     overflowToDisk: true/false
     skipCacheIfElementSizeInKBExceeds: {num_elements}
 ```
+
+## Resource files
+
+### Deploy resource files: `resourcefiles`
+```
+apigee-apim resourcefiles resourcefiles.yaml --org <org> --env test
+```
+resourcefiles.yaml
+```yaml
+resourcefiles:
+  test:
+    type: "properties"
+    filename: "test.properties"
+```
 ## Proxies
 Call this from the directory above 'apiproxy' or specify a different directory using `--directory -d`
 

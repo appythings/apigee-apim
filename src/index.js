@@ -10,6 +10,7 @@ const deploySharedFlow = require('./sharedFlow')
 const deploySpec = require('./portal')
 const listAPIProducts = require('./listapiproducts')
 const developerApps = require('./developerApps')
+const updateResourcefiles = require('./resourceFiles')
 
 function handleError (e) {
   console.error('ERROR:')
@@ -110,5 +111,9 @@ program.command('getCustomAttributeValue')
 
 program.command('downloadProxies')
   .action((manifest) => downloadProxies(build()).catch(handleError))
+
+program.command('resourcefiles <manifest>')
+  .description('Create or updates resourcefiles')
+  .action((manifest) => updateResourcefiles(build(), manifest).catch(handleError))
 
 program.parse(process.argv)

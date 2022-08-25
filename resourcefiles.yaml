@@ -1,0 +1,4 @@
+resourcefiles:
+  test:
+    type: "properties"
+    filename: "test.properties"
