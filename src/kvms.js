@@ -47,11 +47,23 @@ module.exports = async (config, manifest, purgeDeleted) => {
     }
 
     try {
-      await apigee.kvm.detail(kvmName)
-      await apigee.kvm.update(newkvm, purgeDeleted)
+      if (config.hybrid) {
+        const list = await apigee.kvm.list()
+        if (!list.includes(kvmName)) {
+          await apigee.kvm.add({
+            'name': kvmName,
+            'encrypted': encrypted
+          })
+          console.log('Created kvm: ' + kvmName)
+        }
+        await apigee.kvm.updateHybrid(newkvm, purgeDeleted)
+      } else {
+        await apigee.kvm.detail(kvmName)
+        await apigee.kvm.update(newkvm, purgeDeleted)
+      }
       console.log('Updated kvm: ' + newkvm.name)
     } catch (e) {
-      if (e.message.includes('404')) {
+      if (e.message.includes('404') && !config.hybrid) {
         try {
           await apigee.kvm.add(newkvm)
         } catch (e) {

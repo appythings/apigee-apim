@@ -1,5 +1,5 @@
 kvms:
   test1:
     encrypted: true
-    key2: "{value}"
-    key3: "value9"
+    key3: "value19"
+    key4: "value95"
