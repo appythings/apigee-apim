@@ -5,7 +5,7 @@ const archiver = require('archiver')
 const unzipper = require('unzipper')
 
 module.exports = {
-  deployProxy: async (config, name, directory) => {
+  deployProxy: async (config, name, directory, serviceAccount) => {
     const apigee = new Apigee(config)
     if (!await fs.exists(directory)) {
       throw new Error(`Directory ${directory} not found`)
@@ -17,7 +17,7 @@ module.exports = {
     archive.finalize()
     output.on('close', async function () {
       try {
-        await apigee.proxy.add(fs.createReadStream('apiproxy.zip'), name)
+        await apigee.proxy.add(fs.createReadStream('apiproxy.zip'), name, serviceAccount)
       } catch (e) {
         process.exitCode = 1
         if (e.response) {

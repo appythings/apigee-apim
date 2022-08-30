@@ -34,7 +34,7 @@ class Proxy {
     return deployment.data.revision.find((rev) => rev.state === 'deployed')
   }
 
-  async add (Proxy, name) {
+  async add (Proxy, name, serviceAccount) {
     const response = await this.request({
       url: `/organizations/${this.config.organization}/apis?action=import&name=${name}`,
       headers: {
@@ -43,11 +43,12 @@ class Proxy {
       method: 'POST',
       data: Proxy
     })
-    return this.deploy(name, response.data.revision)
+    return this.deploy(name, response.data.revision, serviceAccount)
   }
 
-  async deploy (name, revision) {
-    return this.request.post(`/organizations/${this.config.organization}/environments/${this.config.environment}/apis/${name}/revisions/${revision}/deployments?override=true`, {})
+  async deploy (name, revision, serviceAccount) {
+    console.log(`/organizations/${this.config.organization}/environments/${this.config.environment}/apis/${name}/revisions/${revision}/deployments?override=true${serviceAccount ? `&serviceAccount=${serviceAccount}` : ''}`)
+    return this.request.post(`/organizations/${this.config.organization}/environments/${this.config.environment}/apis/${name}/revisions/${revision}/deployments?override=true${serviceAccount ? `&serviceAccount=${serviceAccount}` : ''}`, {})
   }
 
   async delete (name) {
