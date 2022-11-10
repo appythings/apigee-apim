@@ -12,6 +12,7 @@ module.exports = async (config, manifest) => {
     return false
   }
   const resourceConfig = yml.resourcefiles
+  console.log(resourceConfig)
   if (!resourceConfig) {
     return false
   }
@@ -21,6 +22,7 @@ module.exports = async (config, manifest) => {
     resource.name = resourceName
     expect(resource, 'The resourcefiles value is not an object').to.be.an('object')
     const exists = await apigee.resource.detail(resource)
+    console.log(exists.data)
     if (exists) {
       await apigee.resource.update(fs.createReadStream(resource.filename), {
         type: resource.type,

@@ -71,7 +71,7 @@ module.exports = async (config, manifest, purgeDeleted) => {
         }
         console.log('Created kvm: ' + newkvm.name)
       } else {
-        console.log(e)
+        console.log(JSON.stringify(e.response.data))
         process.exitCode = 1
       }
     }

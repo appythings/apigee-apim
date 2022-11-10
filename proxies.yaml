@@ -1,0 +1,3 @@
+proxies:
+  echo-v1:
+    directory: echo-v1

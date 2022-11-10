@@ -3,21 +3,22 @@ const Apigee = require('./lib/apigee')
 const fs = require('fs-extra')
 const archiver = require('archiver')
 const unzipper = require('unzipper')
+const yaml = require('js-yaml')
 
-module.exports = {
+const Proxy = {
   deployProxy: async (config, name, directory, serviceAccount) => {
     const apigee = new Apigee(config)
     if (!await fs.exists(directory)) {
       throw new Error(`Directory ${directory} not found`)
     }
-    const output = fs.createWriteStream('apiproxy.zip')
+    const output = fs.createWriteStream(`apiproxy_${name}.zip`)
     const archive = archiver('zip')
     archive.pipe(output)
     archive.directory(directory, 'apiproxy')
     archive.finalize()
     output.on('close', async function () {
       try {
-        await apigee.proxy.add(fs.createReadStream('apiproxy.zip'), name, serviceAccount)
+        await apigee.proxy.add(fs.createReadStream(`apiproxy_${name}.zip`), name, serviceAccount)
       } catch (e) {
         process.exitCode = 1
         if (e.response) {
@@ -56,6 +57,19 @@ module.exports = {
           .pipe(unzipper.Extract({ path: `${proxy}` }))
       })
     })
+  },
+  deployProxies: async (config, manifest) => {
+    let yml = yaml.safeLoad(fs.readFileSync(manifest, 'utf8'))
+    if (!yml) {
+      return false
+    }
+    const proxyConfig = yml.proxies
+    if (!proxyConfig) {
+      return false
+    }
+    for (let proxyName of Object.keys(proxyConfig)) {
+      await Proxy.deployProxy(config, proxyName, proxyConfig[proxyName].directory, proxyConfig[proxyName].serviceAccount)
+    }
   }
-
 }
+module.exports = Proxy
