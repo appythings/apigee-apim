@@ -11,6 +11,7 @@ const deploySpec = require('./portal')
 const listAPIProducts = require('./listapiproducts')
 const developerApps = require('./developerApps')
 const updateResourcefiles = require('./resourceFiles')
+const mockProxy = require('./mockProxy')
 
 function handleError (e) {
   console.error('ERROR:')
@@ -120,5 +121,9 @@ program.command('downloadProxies')
 program.command('resourcefiles <manifest>')
   .description('Create or updates resourcefiles')
   .action((manifest) => updateResourcefiles(build(), manifest).catch(handleError))
+
+program.command('mockProxy <pathToSpec> ')
+  .description('Create a mock proxy')
+  .action((pathToSpec) => mockProxy(build(), pathToSpec).catch(handleError))
 
 program.parse(process.argv)
