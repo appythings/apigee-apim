@@ -29,6 +29,19 @@ const Proxy = {
       }
     })
   },
+  undeployProxy: async (config, name, revision, serviceAccount) => {
+    const apigee = new Apigee(config)
+    try {
+      await apigee.proxy.undeploy(name, revision, serviceAccount)
+    } catch (e) {
+      process.exitCode = 1
+      if (e.response) {
+        console.log(JSON.stringify(e.response.data))
+      } else {
+        console.log(e.message)
+      }
+    }
+  },
   deployExistingRevision: async (config, name, revision) => {
     const apigee = new Apigee(config)
     const deployment = await apigee.proxy.deploy(name, revision)
