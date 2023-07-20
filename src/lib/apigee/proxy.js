@@ -50,6 +50,10 @@ class Proxy {
     return this.request.post(`/organizations/${this.config.organization}/environments/${this.config.environment}/apis/${name}/revisions/${revision}/deployments?override=true${serviceAccount ? `&serviceAccount=${serviceAccount}` : ''}`, {})
   }
 
+  async undeploy (name, revision, serviceAccount) {
+    return this.request.delete(`/organizations/${this.config.organization}/environments/${this.config.environment}/apis/${name}/revisions/${revision}/deployments${serviceAccount ? `&serviceAccount=${serviceAccount}` : ''}`)
+  }
+
   async delete (name) {
     try {
       await this.request.delete(`/organizations/${this.config.organization}/apis/${name}`)
