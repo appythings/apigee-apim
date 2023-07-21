@@ -48,14 +48,16 @@ const Proxy = {
     }
     list.forEach(async (proxy) => {
       const proxyZip = await apigee.proxy.detail(proxy)
-      await fs.ensureDir(proxy)
-      let writeStream = fs.createWriteStream(`${proxy}/apiproxy.zip`)
-      proxyZip.pipe(writeStream)
-      writeStream.on('finish', () => {
-        writeStream.end()
-        fs.createReadStream(`${proxy}/apiproxy.zip`)
-          .pipe(unzipper.Extract({ path: `${proxy}` }))
-      })
+      if(proxyZip) {
+        await fs.ensureDir(proxy)
+        let writeStream = fs.createWriteStream(`${proxy}/apiproxy.zip`)
+        proxyZip.pipe(writeStream)
+        writeStream.on('finish', () => {
+          writeStream.end()
+          fs.createReadStream(`${proxy}/apiproxy.zip`)
+            .pipe(unzipper.Extract({ path: `${proxy}` }))
+        })
+      }
     })
   },
   deployProxies: async (config, manifest) => {
