@@ -7,6 +7,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@apidevtools/swagger-parser": "^10.1.0",
     "api-spec-converter": "^2.10.1",
     "archiver": "^5.0.2",
     "axios": "^0.18.0",
@@ -17,8 +18,10 @@
     "form-data": "^3.0.0",
     "fs-extra": "^8.1.0",
     "js-yaml": "^3.14.0",
+    "json-schema-faker": "^0.5.0-rcv.46",
     "standard": "^11.0.1",
     "unzipper": "^0.10.11",
+    "xml-js": "^1.6.11",
     "yargs": "^15.4.1"
   }
 }

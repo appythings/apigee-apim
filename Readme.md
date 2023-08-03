@@ -219,10 +219,19 @@ This functionality is in alpha release and is only available for orgs that have 
 apigee-apim deploySpec -s <spec> -a <apiproduct> -p <portal> --org <org> --env <env>
 ```
 
-# Developer Apps 
+# Developer Apps
 
 ## Custom attributes
 Call this from command line when globally installed to upsert a custom attribute
 ```
  apigee-apim updateCustomAttribute --org <org> --dev <developer> --app <appName> --attributeName <attributeName> --attributeValue <attributeValue>
+```
+
+# Create proxy out of spec.json/yml for Apigee
+
+## Custom attributes
+Call this from command line when globally installed and insert a spec.json/yml.
+This will create an apiproxy folder and the content inside.
+```
+ apigee-apim mockProxy spec.json --org <org>
 ```
