@@ -51,7 +51,6 @@ const Proxy = {
   listDeployedRevision: async (config, name) => {
     const apigee = new Apigee(config)
     const deployment = await apigee.proxy.deployment(name)
-    console.log(deployment.name)
     return deployment
   },
   downloadProxies: async (config, list = []) => {
