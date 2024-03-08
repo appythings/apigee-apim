@@ -100,7 +100,7 @@ program.command('deploySpec')
 program.command('listDeployedRevision')
   .requiredOption('-n, --api <name>', 'The name of the API proxy. Note: The name of the API proxy must be unique within an organization. The characters you are allowed to use in the name are restricted to the following: A-Z0-9._\\-$ %.')
   .description('Lists the currently deployed revision for an API on an environment')
-  .action((options) => listDeployedRevision(build(), options.api).then(rev => console.log(rev)).catch(handleError))
+  .action((options) => listDeployedRevision(build(), options.api).then(rev => rev ? console.log(rev) : console.log('No revision deployed')).catch(handleError))
 
 program.command('listAPIProducts')
   .description('Lists the products in the Apigee organization')

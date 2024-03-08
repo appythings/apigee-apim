@@ -30,9 +30,16 @@ class Proxy {
   }
 
   async deployment (name) {
-    const deployment = await this.request(`/organizations/${this.config.organization}/environments/${this.config.environment}/apis/${name}/deployments`)
+    try  {
+      const deployment = await this.request(`/organizations/${this.config.organization}/environments/${this.config.environment}/apis/${name}/deployments`)
 
-    return deployment.data.revision ? deployment.data.revision.find((rev) => rev.state === 'deployed')?.name : deployment.data.deployments ? deployment.data.deployments[0].revision : null
+      return deployment.data.revision ? deployment.data.revision.find((rev) => rev.state === 'deployed')?.name : deployment.data.deployments ? deployment.data.deployments[0].revision : null
+    } catch (e) {
+      if(e.response.status !== 404){
+        throw e
+      }
+      return null
+    }
   }
 
   async add (Proxy, name, serviceAccount) {
