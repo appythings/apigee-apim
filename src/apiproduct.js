@@ -36,6 +36,9 @@ module.exports = async (config, manifest) => {
       'description': product.description,
       'displayName': product.name,
       'environments': product.environments,
+      "quota": product.quota,
+      "quotaInterval": product.quotaInterval,
+      "quotaTimeUnit": product.quotaTimeUnit,
       'name': product.name,
       'proxies': product.proxies,
       'scopes': []
