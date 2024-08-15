@@ -42,9 +42,9 @@ const Proxy = {
       }
     }
   },
-  deployExistingRevision: async (config, name, revision) => {
+  deployExistingRevision: async (config, name, revision, serviceAccount) => {
     const apigee = new Apigee(config)
-    const deployment = await apigee.proxy.deploy(name, revision)
+    const deployment = await apigee.proxy.deploy(name, revision, serviceAccount)
     console.log(`Deployed proxy "${name}" revision "${revision}"`)
     return deployment
   },
