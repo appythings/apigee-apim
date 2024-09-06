@@ -39,7 +39,7 @@ class SharedFlow {
         data: SharedFlow
       })
       await this.request({
-        url: `/organizations/${this.config.organization}/environments/${this.config.environment}/sharedflows/${name}/revisions/${response.data.revision}/deployments?override=true${serviceAccount ? `&serviceAccount=${serviceAccount}` : ''}`,
+        url: `/organizations/${this.config.organization}/environments/${this.config.environment}/sharedflows/${name}/revisions/${response.data.revision}/deployments?override=true${serviceAccount && serviceAccount !== '' ? `&serviceAccount=${serviceAccount}` : ''}`,
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         },
