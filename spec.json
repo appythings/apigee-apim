@@ -1,0 +1,296 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "SharePoint REST API",
+    "description": "A simple OpenAPI specification for SharePoint REST API.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "/sites",
+      "description": "SharePoint Site API",
+      "variables": {
+        "tenant": {
+          "default": "yourtenant"
+        },
+        "site": {
+          "default": "yoursite"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/_api/web": {
+      "get": {
+        "summary": "Get information about the current SharePoint site",
+        "operationId": "getWebInfo",
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved site information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "Title": {
+                      "type": "string",
+                      "example": "Your Site Title"
+                    },
+                    "Url": {
+                      "type": "string",
+                      "example": "https://yourtenant.sharepoint.com/sites/yoursite"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/_api/web/lists": {
+      "get": {
+        "summary": "Get lists in the current SharePoint site",
+        "operationId": "getLists",
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved the lists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "Title": {
+                        "type": "string",
+                        "example": "Documents"
+                      },
+                      "Id": {
+                        "type": "string",
+                        "example": "12345"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/_api/web/lists/{listId}/items": {
+      "get": {
+        "summary": "Get items from a specific list",
+        "operationId": "getListItems",
+        "parameters": [
+          {
+            "name": "listId",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the list to fetch items from",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved the list items",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "Title": {
+                        "type": "string",
+                        "example": "Document Title"
+                      },
+                      "ID": {
+                        "type": "integer",
+                        "example": 1
+                      },
+                      "Created": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-02-26T14:00:00Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Add an item to a SharePoint list",
+        "operationId": "addListItem",
+        "parameters": [
+          {
+            "name": "listId",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the list to add the item to",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Title": {
+                    "type": "string",
+                    "example": "New Document"
+                  },
+                  "Description": {
+                    "type": "string",
+                    "example": "This is a new document item"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully added the item to the list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "Id": {
+                      "type": "integer",
+                      "example": 2
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/_api/web/lists/{listId}/items/{itemId}": {
+      "put": {
+        "summary": "Update an item in a SharePoint list",
+        "operationId": "updateListItem",
+        "parameters": [
+          {
+            "name": "listId",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the list containing the item",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "itemId",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the item to update",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Title": {
+                    "type": "string",
+                    "example": "Updated Document"
+                  },
+                  "Description": {
+                    "type": "string",
+                    "example": "Updated document description"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated the item",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "Id": {
+                      "type": "integer",
+                      "example": 1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an item from a SharePoint list",
+        "operationId": "deleteListItem",
+        "parameters": [
+          {
+            "name": "listId",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the list containing the item to delete",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "itemId",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the item to delete",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successfully deleted the item"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "OAuth2": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://accounts.accesscontrol.windows.net/{tenant}/tokens/OAuth/2",
+            "scopes": {
+              "https://{tenant}.sharepoint.com/.default": "Access to SharePoint data"
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "OAuth2": []
+    }
+  ]
+}
