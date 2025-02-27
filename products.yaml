@@ -1,5 +1,8 @@
 products:
   - name: test-cmd-tool
+    quota: 1000,
+    quotaInterval: 1,
+    quotaTimeUnit: minute,
     description: |
       test-cmd-tool2
     environments:

@@ -3,7 +3,7 @@ const Apigee = require('./lib/apigee')
 const fs = require('fs-extra')
 const archiver = require('archiver')
 
-module.exports = async (config, name, directory) => {
+module.exports = async (config, name, directory, serviceAccount) => {
   const apigee = new Apigee(config)
   if (!await fs.exists(directory)) {
     throw new Error(`Directory ${directory} not found`)
@@ -15,7 +15,7 @@ module.exports = async (config, name, directory) => {
   archive.finalize()
   output.on('close', async function () {
     try {
-      await apigee.sharedFlow.add(fs.createReadStream('sharedflowbundle.zip'), name)
+      await apigee.sharedFlow.add(fs.createReadStream('sharedflowbundle.zip'), name, serviceAccount)
     } catch (e) {
       process.exitCode = 1
       console.log(JSON.stringify(e.response.data))

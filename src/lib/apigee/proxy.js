@@ -30,8 +30,16 @@ class Proxy {
   }
 
   async deployment (name) {
-    const deployment = await this.request(`/organizations/${this.config.organization}/environments/${this.config.environment}/apis/${name}/deployments`)
-    return deployment.data.revision.find((rev) => rev.state === 'deployed')
+    try  {
+      const deployment = await this.request(`/organizations/${this.config.organization}/environments/${this.config.environment}/apis/${name}/deployments`)
+
+      return deployment.data.revision ? deployment.data.revision.find((rev) => rev.state === 'deployed')?.name : deployment.data.deployments ? deployment.data.deployments[0].revision : null
+    } catch (e) {
+      if(e.response.status !== 404){
+        throw e
+      }
+      return null
+    }
   }
 
   async add (Proxy, name, serviceAccount) {
@@ -47,7 +55,11 @@ class Proxy {
   }
 
   async deploy (name, revision, serviceAccount) {
-    return this.request.post(`/organizations/${this.config.organization}/environments/${this.config.environment}/apis/${name}/revisions/${revision}/deployments?override=true${serviceAccount ? `&serviceAccount=${serviceAccount}` : ''}`, {})
+    return this.request.post(`/organizations/${this.config.organization}/environments/${this.config.environment}/apis/${name}/revisions/${revision}/deployments?override=true${serviceAccount && serviceAccount !== '' ? `&serviceAccount=${serviceAccount}` : ''}`, {})
+  }
+
+  async undeploy (name, revision, serviceAccount) {
+    return this.request.delete(`/organizations/${this.config.organization}/environments/${this.config.environment}/apis/${name}/revisions/${revision}/deployments${serviceAccount && serviceAccount !== '' ? `&serviceAccount=${serviceAccount}` : ''}`)
   }
 
   async delete (name) {

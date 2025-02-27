@@ -29,16 +29,28 @@ const Proxy = {
       }
     })
   },
-  deployExistingRevision: async (config, name, revision) => {
+  undeployProxy: async (config, name, revision, serviceAccount) => {
     const apigee = new Apigee(config)
-    const deployment = await apigee.proxy.deploy(name, revision)
+    try {
+      await apigee.proxy.undeploy(name, revision, serviceAccount)
+    } catch (e) {
+      process.exitCode = 1
+      if (e.response) {
+        console.log(JSON.stringify(e.response.data))
+      } else {
+        console.log(e.message)
+      }
+    }
+  },
+  deployExistingRevision: async (config, name, revision, serviceAccount) => {
+    const apigee = new Apigee(config)
+    const deployment = await apigee.proxy.deploy(name, revision, serviceAccount)
     console.log(`Deployed proxy "${name}" revision "${revision}"`)
     return deployment
   },
   listDeployedRevision: async (config, name) => {
     const apigee = new Apigee(config)
     const deployment = await apigee.proxy.deployment(name)
-    console.log(deployment.name)
     return deployment
   },
   downloadProxies: async (config, list = []) => {
