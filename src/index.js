@@ -38,7 +38,7 @@ const build = () => {
 program.name(name)
   .version(version, '-v, --version')
   .description(description)
-  .requiredOption('-o, --org <org>', 'apigee org')
+  .option('-o, --org <org>', 'apigee org')
   .option('-e, --env <env>', 'apigee env')
   .option('-h, --hybrid <accessToken>', 'specify if you wish to deploy to Apigee hybrid')
   .option('-L, --baseuri <baseuri>', ' The base URI for you organization on Apigee Edge. The default is the base URI for Apigee cloud deployments is api.enterprise.apigee.com. For on-premise deployments, the base URL may be different.')
@@ -133,6 +133,8 @@ program.command('resourcefiles <manifest>')
 
 program.command('mockProxy <pathToSpec> ')
   .description('Create a mock proxy')
-  .action((pathToSpec) => mockProxy(build(), pathToSpec).catch(handleError))
+  .option('--folder <folder>', 'Output folder for the API proxy', './mocks')
+  .option('--basepath <basepath>', 'basepath for the API proxy', '')
+  .action((pathToSpec, options) => mockProxy(pathToSpec, options).catch(handleError))
 
 program.parse(process.argv)

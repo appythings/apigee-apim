@@ -7,9 +7,9 @@ const SwaggerParser = require("@apidevtools/swagger-parser");
 
 //variables used for functions below
 const options = {compact: true, spaces: 4}
-const folderName = './apiproxy';
+const folderName = 'apiproxy';
 
-function createMockProxy (spec) {
+function createMockProxy (spec, config) {
   return {
     APIProxy: {
       "_attributes": {
@@ -18,7 +18,7 @@ function createMockProxy (spec) {
       },
       DisplayName: '',
       Description: 'description 1',
-      BasePaths: spec.servers[0].url,
+      BasePaths: config.basepath + spec.servers[0].url,
       ProxyEndpoints: {
         ProxyEndpoint: "default"
       }
@@ -26,38 +26,9 @@ function createMockProxy (spec) {
   }
 }
 
-function createManifests() {
-  return {
-    "_declaration": {
-      "_attributes": {
-        "version": "1.0",
-        "encoding": "UTF-8",
-        "standalone": "yes"
-      }
-    },
-    Manifest: {
-      "_attributes": {
-        "name": "manifest"
-      },
-      Policies: '',
-      ProxyEndpoints: {
-        VersionInfo: {
-          "_attributes" : {
-            "resourceName": "default",
-            version: "some SHA-512 key"
-          }
-        }
-      },
-      Resources: '',
-      SharedFlows: '',
-      TargetEndpoints: ''
-    }
-  }
-}
-
-function createResponse (specPaths, path, verb) {
+function createResponse (specPaths, path, verb, config) {
   if (specPaths[verb].responses['200'] || specPaths[verb].responses['201'] || specPaths[verb].responses['203']) {
-    createPolicies(specPaths[verb])
+    createPolicies(specPaths[verb], config)
     return { Step: {
         Name: `AM-${specPaths[verb].operationId}`
       }
@@ -67,7 +38,7 @@ function createResponse (specPaths, path, verb) {
   }
 }
 
-function createFlow (spec) {
+function createFlow (spec, config) {
   let flows = Object.keys(spec.paths).map(path => {
     return Object.keys(spec.paths[path]).map(verb => {
       return {
@@ -76,7 +47,7 @@ function createFlow (spec) {
         },
         Description: spec.paths[path][verb].operationId,
         Request: "",
-        Response: createResponse(spec.paths[path], path, verb),
+        Response: createResponse(spec.paths[path], path, verb, config),
         Condition: `(proxy.pathsuffix MatchesPath "${path}") and (request.verb = "${verb.toUpperCase()}")`
       }
     })
@@ -91,7 +62,7 @@ function createFlow (spec) {
   return copyItems.map(item => item)
 }
 
-function createDefaultXml (spec) {
+function createDefaultXml (spec, config) {
   let defaultObj = {
     "_declaration": {
       "_attributes": {
@@ -112,7 +83,7 @@ function createDefaultXml (spec) {
         Response: '',
       },
       Flows: {
-        Flow: createFlow(spec)
+        Flow: createFlow(spec, config)
       },
       PostFlow: {
         "_attributes": {
@@ -122,7 +93,7 @@ function createDefaultXml (spec) {
         Response: ""
       },
       HTTPProxyConnection: {
-        BasePath: spec.servers[0].url
+        BasePath: config.basepath + spec.servers[0].url
       },
       RouteRule: {
         "_attributes": {
@@ -135,7 +106,7 @@ function createDefaultXml (spec) {
   return defaultObj
 }
 
-function createPolicies(specPaths) {
+function createPolicies(specPaths, config) {
   let assignMessage = {
     "_declaration": {
     "_attributes": {
@@ -158,7 +129,7 @@ function createPolicies(specPaths) {
       IgnoreUnresolvedVariables: true,
       AssignTo: {
         "_attributes": {
-          "type": "request",
+          "type": "response",
           "transport": "http",
           "createNew": "false"
         }
@@ -184,8 +155,8 @@ function createPolicies(specPaths) {
     }
 
     try {
-      if (fs.existsSync(folderName)) {
-        fs.writeFile(`./apiproxy/policies/AM-${specPaths.operationId}.xml`, assignMessage)
+      if (fs.existsSync(config.folder)) {
+        fs.writeFile(`${config.folder}/apiproxy/policies/AM-${specPaths.operationId}.xml`, assignMessage)
       }
     } catch (err) {
       console.error(err)
@@ -196,26 +167,20 @@ function createPolicies(specPaths) {
 
 }
 
-async function mockProxy (config, file) {
+async function mockProxy (file, config) {
   try {
     const spec = readSwaggerFile(file)
     // const spec = file
     let parser = new SwaggerParser();
     await parser.dereference(spec)
     // creer variabelen voor elke .xml file
-    const mockProxyXml = json2xml(createMockProxy(spec), options)
-    const manifestsXml = json2xml(createManifests(spec), options)
-    if (!fs.existsSync(folderName)) {
-      fs.mkdirSync(folderName);
-      fs.mkdirSync('./apiproxy/policies');
-      fs.mkdirSync('./apiproxy/manifests');
-      fs.mkdirSync('./apiproxy/proxies');
-      if (fs.existsSync(folderName)) {
-        fs.writeFile('./apiproxy/mockProxy.xml', mockProxyXml);
-        fs.writeFile('./apiproxy/manifests/manifests.xml', manifestsXml);
-        fs.writeFile('./apiproxy/proxies/default.xml', createDefaultXml(spec));
-      }
-    }
+    const mockProxyXml = json2xml(createMockProxy(spec, config), options)
+    fs.ensureDirSync(config.folder);
+    fs.ensureDirSync(config.folder + '/apiproxy');
+    fs.ensureDirSync(config.folder + '/apiproxy/policies');
+    fs.ensureDirSync(config.folder + '/apiproxy/proxies');
+    fs.writeFile(config.folder + '/apiproxy/index.xml', mockProxyXml);
+    fs.writeFile(config.folder + '/apiproxy/proxies/default.xml', createDefaultXml(spec, config));
     console.log('APIProxy created')
   } catch (err) {
     console.error(err);
