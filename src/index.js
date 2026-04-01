@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+// SPDX-License-Identifier: Apache-2.0
+// Copyright 2026 AppyThings
+
 const program = require('commander')
 const { version, name, description } = require('../package.json')
 const updateProducts = require('./apiproduct')

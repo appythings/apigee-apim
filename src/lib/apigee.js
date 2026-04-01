@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: Apache-2.0
+// Copyright 2026 AppyThings
+
 const axios = require('axios')
 const qs = require('qs')
 const fs = require('fs-extra')
