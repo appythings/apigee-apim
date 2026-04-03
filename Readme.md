@@ -235,3 +235,6 @@ This will create an apiproxy folder and the content inside.
 ```
  apigee-apim mockProxy spec.json --org <org>
 ```
+
+## License
+Licensed under the Apache License, Version 2.0. See `LICENSE` and `NOTICE`.
