@@ -18,10 +18,10 @@ const Proxy = {
     archive.finalize()
     output.on('close', async function () {
       try {
-        await apigee.proxy.add(fs.createReadStream(`apiproxy_${name}.zip`), name, serviceAccount, space)
         if (space) {
           await apigee.proxy.ensureSpace(name, space)
         }
+        await apigee.proxy.add(fs.createReadStream(`apiproxy_${name}.zip`), name, serviceAccount, space)
       } catch (e) {
         process.exitCode = 1
         if (e.response) {

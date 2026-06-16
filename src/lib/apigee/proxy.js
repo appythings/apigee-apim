@@ -55,10 +55,10 @@ class Proxy {
   }
 
   async move (name, space) {
-    const url = space
-      ? `/organizations/${this.config.organization}/apis/${name}:move?space=${space}`
-      : `/organizations/${this.config.organization}/apis/${name}:move`
-    return this.request.post(url, {})
+    return this.request.post(
+      `/organizations/${this.config.organization}/apis/${name}:move`,
+      space ? { space } : {}
+    )
   }
 
   async add (Proxy, name, serviceAccount, space) {
@@ -76,6 +76,9 @@ class Proxy {
 
   async ensureSpace (name, targetSpace) {
     const metadata = await this.getMetadata(name)
+    if(!metadata) {
+      return
+    }
     const currentSpace = (metadata && metadata.space) || null
     const desired = targetSpace || null
     if (currentSpace !== desired) {

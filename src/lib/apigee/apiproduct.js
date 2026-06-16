@@ -52,10 +52,10 @@ class Apiproduct {
   }
 
   async move (name, space) {
-    const url = space
-      ? `/organizations/${this.config.organization}/apiproducts/${name}:move?space=${space}`
-      : `/organizations/${this.config.organization}/apiproducts/${name}:move`
-    return this.request.post(url, {})
+    return this.request.post(
+      `/organizations/${this.config.organization}/apiproducts/${name}:move`,
+      space ? { space } : {}
+    )
   }
 
   async ensureSpace (name, targetSpace) {

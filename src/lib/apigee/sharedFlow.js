@@ -41,10 +41,10 @@ class SharedFlow {
   }
 
   async move (name, space) {
-    const url = space
-      ? `/organizations/${this.config.organization}/sharedflows/${name}:move?space=${space}`
-      : `/organizations/${this.config.organization}/sharedflows/${name}:move`
-    return this.request.post(url, {})
+    return this.request.post(
+      `/organizations/${this.config.organization}/sharedflows/${name}:move`,
+      space ? { space } : {}
+    )
   }
 
   async ensureSpace (name, targetSpace) {
