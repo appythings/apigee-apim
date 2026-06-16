@@ -6,7 +6,7 @@ const unzipper = require('unzipper')
 const yaml = require('js-yaml')
 
 const Proxy = {
-  deployProxy: async (config, name, directory, serviceAccount) => {
+  deployProxy: async (config, name, directory, serviceAccount, space) => {
     const apigee = new Apigee(config)
     if (!await fs.exists(directory)) {
       throw new Error(`Directory ${directory} not found`)
@@ -18,7 +18,10 @@ const Proxy = {
     archive.finalize()
     output.on('close', async function () {
       try {
-        await apigee.proxy.add(fs.createReadStream(`apiproxy_${name}.zip`), name, serviceAccount)
+        await apigee.proxy.add(fs.createReadStream(`apiproxy_${name}.zip`), name, serviceAccount, space)
+        if (space) {
+          await apigee.proxy.ensureSpace(name, space)
+        }
       } catch (e) {
         process.exitCode = 1
         if (e.response) {
@@ -80,7 +83,7 @@ const Proxy = {
       return false
     }
     for (let proxyName of Object.keys(proxyConfig)) {
-      await Proxy.deployProxy(config, proxyName, proxyConfig[proxyName].directory, proxyConfig[proxyName].serviceAccount)
+      await Proxy.deployProxy(config, proxyName, proxyConfig[proxyName].directory, proxyConfig[proxyName].serviceAccount, proxyConfig[proxyName].space)
     }
   }
 }

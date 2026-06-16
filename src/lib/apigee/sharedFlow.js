@@ -28,10 +28,40 @@ class SharedFlow {
     }
   }
 
-  async add (SharedFlow, name, serviceAccount) {
+  async getMetadata (name) {
+    try {
+      const response = await this.request(`/organizations/${this.config.organization}/sharedflows/${name}`)
+      return response.data
+    } catch (e) {
+      if (e.response && e.response.status === 404) {
+        return null
+      }
+      throw e
+    }
+  }
+
+  async move (name, space) {
+    const url = space
+      ? `/organizations/${this.config.organization}/sharedflows/${name}:move?space=${space}`
+      : `/organizations/${this.config.organization}/sharedflows/${name}:move`
+    return this.request.post(url, {})
+  }
+
+  async ensureSpace (name, targetSpace) {
+    const metadata = await this.getMetadata(name)
+    const currentSpace = (metadata && metadata.space) || null
+    const desired = targetSpace || null
+    if (currentSpace !== desired) {
+      await this.move(name, desired)
+      console.log(`Moved shared flow "${name}" to space: ${desired || '(org level)'}`)
+    }
+  }
+
+  async add (SharedFlow, name, serviceAccount, space) {
     if (SharedFlow !== null) {
+      const spaceParam = space ? `&space=${space}` : ''
       const response = await this.request({
-        url: `/organizations/${this.config.organization}/sharedflows?action=import&name=${name}`,
+        url: `/organizations/${this.config.organization}/sharedflows?action=import&name=${name}${spaceParam}`,
         headers: {
           'Content-Type': 'application/octet-stream'
         },

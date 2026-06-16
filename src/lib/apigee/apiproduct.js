@@ -51,6 +51,23 @@ class Apiproduct {
     }
   }
 
+  async move (name, space) {
+    const url = space
+      ? `/organizations/${this.config.organization}/apiproducts/${name}:move?space=${space}`
+      : `/organizations/${this.config.organization}/apiproducts/${name}:move`
+    return this.request.post(url, {})
+  }
+
+  async ensureSpace (name, targetSpace) {
+    const metadata = await this.detail(name)
+    const currentSpace = (metadata && metadata.space) || null
+    const desired = targetSpace || null
+    if (currentSpace !== desired) {
+      await this.move(name, desired)
+      console.log(`Moved API product "${name}" to space: ${desired || '(org level)'}`)
+    }
+  }
+
   async delete (name) {
     try {
       await this.request.delete(`/organizations/${this.config.organization}/apiproducts/${name}`)

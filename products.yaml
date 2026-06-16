@@ -9,3 +9,5 @@ products:
       - test
     proxies:
       - apigee-account-proxy-v1
+    # Optional: assign this product to an Apigee Space (Apigee X/Hybrid only).
+    # space: red

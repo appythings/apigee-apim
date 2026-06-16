@@ -1,3 +1,5 @@
 proxies:
   echo-v1:
     directory: echo-v1
+    # Optional: assign this proxy to an Apigee Space (Apigee X/Hybrid only).
+    # space: red

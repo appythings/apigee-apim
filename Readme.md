@@ -195,6 +195,70 @@ resourcefiles:
     type: "properties"
     filename: "test.properties"
 ```
+## Spaces
+
+> **Apigee X / Hybrid only.** Spaces are not available on Apigee Edge. You must authenticate with a bearer token (`-t` or `-h`).
+
+Spaces let you apply IAM policies to groups of API resources (proxies, shared flows, API products) at scale.
+
+### Manage Spaces: `spaces`
+
+Creates or updates Spaces and their IAM member bindings. The manifest is the source of truth for IAM — each sync fully replaces the policy for each space listed.
+
+```
+apigee-apim spaces spaces.yaml --org <org> --token <accessToken>
+```
+
+spaces.yaml:
+```yaml
+spaces:
+  - name: red
+    displayName: Red Team
+    members:
+      - member: user:alice@acme.com
+        role: roles/apigee.spaceContentEditor
+      - member: group:red-team@acme.com
+        role: roles/apigee.spaceContentViewer
+  - name: blue
+    displayName: Blue Team
+    members:
+      - member: user:bob@acme.com
+        role: roles/apigee.spaceContentEditor
+```
+
+### Assigning resources to a Space
+
+Add a `space` field to any proxy, shared flow, or API product entry in the manifest or deploy command. The tool will assign the resource to the Space at import time and move it if it is already assigned to a different Space.
+
+**API proxy (deploy command):**
+```
+apigee-apim deploy -n echo-v1 -d echo-v1 --space red --org <org> --env <env> --token <accessToken>
+```
+
+**API proxy (manifest):**
+```yaml
+proxies:
+  echo-v1:
+    directory: echo-v1
+    space: red
+```
+
+**Shared flow:**
+```
+apigee-apim deploySharedFlow -n my-flow -d sharedflowbundle --space red --org <org> --env <env> --token <accessToken>
+```
+
+**API product (manifest):**
+```yaml
+products:
+  - name: my-product
+    space: red
+    environments:
+      - dev
+    proxies:
+      - echo-v1
+```
+
 ## Proxies
 Call this from the directory above 'apiproxy' or specify a different directory using `--directory -d`
 

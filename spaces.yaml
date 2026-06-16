@@ -1,0 +1,15 @@
+spaces:
+  - name: red
+    displayName: Red Team
+    members:
+      - member: user:alice@acme.com
+        role: roles/apigee.spaceContentEditor
+      - member: group:red-team@acme.com
+        role: roles/apigee.spaceContentViewer
+  - name: blue
+    displayName: Blue Team
+    members:
+      - member: user:bob@acme.com
+        role: roles/apigee.spaceContentEditor
+      - member: group:blue-team@acme.com
+        role: roles/apigee.spaceContentViewer

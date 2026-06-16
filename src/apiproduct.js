@@ -45,14 +45,17 @@ module.exports = async (config, manifest) => {
         'description': product.description,
         'displayName': product.displayName || product.name,
         'environments': product.environments,
-        "quota": product.quota,
-        "quotaInterval": product.quotaInterval,
-        "quotaTimeUnit": product.quotaTimeUnit,
+        "quota": '' + product.quota,
+        "quotaInterval": '' + product.quotaInterval,
+        "quotaTimeUnit": '' + product.quotaTimeUnit,
         'name': product.name,
         "operationGroup": {
           "operationConfigs": operations
         },
         'scopes': []
+      }
+      if (product.space) {
+        newProduct.space = product.space
       }
       if (product.tags) {
         newProduct.attributes.push({
@@ -61,7 +64,12 @@ module.exports = async (config, manifest) => {
         })
       }
 
-      return apigee.apiproduct.add(newProduct)
+      const existingOpenapi = await apigee.apiproduct.detail(product.name)
+      await apigee.apiproduct.add(newProduct)
+      if (product.space && existingOpenapi) {
+        await apigee.apiproduct.ensureSpace(product.name, product.space)
+      }
+      return
     }
     const newProduct = {
       'apiResources': [],
@@ -75,14 +83,22 @@ module.exports = async (config, manifest) => {
       'description': product.description,
       'displayName': product.displayName || product.name,
       'environments': product.environments,
-      "quota": product.quota,
-      "quotaInterval": product.quotaInterval,
-      "quotaTimeUnit": product.quotaTimeUnit,
+      "quota": '' + product.quota,
+      "quotaInterval": '' + product.quotaInterval,
+      "quotaTimeUnit": '' + product.quotaTimeUnit,
       'name': product.name,
       'proxies': product.proxies,
+      'operationGroup': product.operationGroup,
       'scopes': []
     }
+    if (product.space) {
+      newProduct.space = product.space
+    }
 
-    return apigee.apiproduct.add(newProduct)
+    const existing = await apigee.apiproduct.detail(product.name)
+    await apigee.apiproduct.add(newProduct)
+    if (product.space && existing) {
+      await apigee.apiproduct.ensureSpace(product.name, product.space)
+    }
   })
 }

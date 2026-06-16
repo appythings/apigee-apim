@@ -42,9 +42,29 @@ class Proxy {
     }
   }
 
-  async add (Proxy, name, serviceAccount) {
+  async getMetadata (name) {
+    try {
+      const response = await this.request(`/organizations/${this.config.organization}/apis/${name}`)
+      return response.data
+    } catch (e) {
+      if (e.response && e.response.status === 404) {
+        return null
+      }
+      throw e
+    }
+  }
+
+  async move (name, space) {
+    const url = space
+      ? `/organizations/${this.config.organization}/apis/${name}:move?space=${space}`
+      : `/organizations/${this.config.organization}/apis/${name}:move`
+    return this.request.post(url, {})
+  }
+
+  async add (Proxy, name, serviceAccount, space) {
+    const spaceParam = space ? `&space=${space}` : ''
     const response = await this.request({
-      url: `/organizations/${this.config.organization}/apis?action=import&name=${name}`,
+      url: `/organizations/${this.config.organization}/apis?action=import&name=${name}${spaceParam}`,
       headers: {
         'Content-Type': 'application/octet-stream'
       },
@@ -52,6 +72,16 @@ class Proxy {
       data: Proxy
     })
     return this.deploy(name, response.data.revision, serviceAccount)
+  }
+
+  async ensureSpace (name, targetSpace) {
+    const metadata = await this.getMetadata(name)
+    const currentSpace = (metadata && metadata.space) || null
+    const desired = targetSpace || null
+    if (currentSpace !== desired) {
+      await this.move(name, desired)
+      console.log(`Moved proxy "${name}" to space: ${desired || '(org level)'}`)
+    }
   }
 
   async deploy (name, revision, serviceAccount) {
