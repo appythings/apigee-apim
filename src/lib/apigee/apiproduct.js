@@ -22,6 +22,7 @@ class Apiproduct {
       return response.data
     } catch (e) {
       console.log(`apiproduct ${name} does not exist. Will now try to create it.`)
+      console.log(JSON.stringify(e.response?.data))
     }
     return false
   }
@@ -47,7 +48,7 @@ class Apiproduct {
       }
     } catch (e) {      
       console.log('Could not create or update product.')
-      console.log(JSON.stringify(e.response.data))
+      console.log(JSON.stringify(e.response?.data))
     }
   }
 
