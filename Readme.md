@@ -99,6 +99,23 @@ targetServers:
 ## Products
 Product are defined on the organization level
 
+Quota limits on a product (`quota`, `quotaInterval`, `quotaTimeUnit`) are not enforced until proxies in the product use a Quota policy with `UseQuotaConfigInAPIProduct`. On Apigee X/Hybrid you can also set `quotaCounterScope` so those product-level limits share a counter across the product (`PRODUCT`), per proxy (`PROXY`), or per operation (`OPERATION`). Operation-level quotas, when present, still use their own counters.
+
+```yaml
+products:
+  - name: product1
+    quota: 1000
+    quotaInterval: 1
+    quotaTimeUnit: minute
+    quotaCounterScope: PRODUCT
+    description: |
+      this is an apigee product named product1
+    environments:
+      - dev
+    proxies:
+      - proxy-A
+```
+
 ### Deploy products: `products` 
 
 ```

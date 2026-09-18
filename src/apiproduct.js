@@ -54,6 +54,9 @@ module.exports = async (config, manifest) => {
         },
         'scopes': []
       }
+      if (product.quotaCounterScope) {
+        newProduct.quotaCounterScope = product.quotaCounterScope
+      }
       if (product.space) {
         newProduct.space = product.space
       }
@@ -90,6 +93,9 @@ module.exports = async (config, manifest) => {
       'proxies': product.proxies,
       'operationGroup': product.operationGroup,
       'scopes': []
+    }
+    if (product.quotaCounterScope) {
+      newProduct.quotaCounterScope = product.quotaCounterScope
     }
     if (product.space) {
       newProduct.space = product.space

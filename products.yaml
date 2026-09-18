@@ -3,6 +3,11 @@ products:
     quota: 1000,
     quotaInterval: 1,
     quotaTimeUnit: minute,
+    # Optional: how product-level quota counters are applied (Apigee X/Hybrid).
+    # PRODUCT = one shared counter for all operations on the product
+    # PROXY = shared counter per proxy
+    # OPERATION = separate counter per operation (default)
+    # quotaCounterScope: PRODUCT
     description: |
       test-cmd-tool2
     environments:
