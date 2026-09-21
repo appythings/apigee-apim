@@ -48,6 +48,7 @@ module.exports = async (config, manifest) => {
         "quota": '' + product.quota,
         "quotaInterval": '' + product.quotaInterval,
         "quotaTimeUnit": '' + product.quotaTimeUnit,
+        'quotaCounterScope': product.quotaCounterScope || 'PRODUCT',
         'name': product.name,
         "operationGroup": {
           "operationConfigs": operations
@@ -86,6 +87,7 @@ module.exports = async (config, manifest) => {
       "quota": '' + product.quota,
       "quotaInterval": '' + product.quotaInterval,
       "quotaTimeUnit": '' + product.quotaTimeUnit,
+      'quotaCounterScope': product.quotaCounterScope || 'PRODUCT',
       'name': product.name,
       'proxies': product.proxies,
       'operationGroup': product.operationGroup,
