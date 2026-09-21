@@ -48,14 +48,12 @@ module.exports = async (config, manifest) => {
         "quota": '' + product.quota,
         "quotaInterval": '' + product.quotaInterval,
         "quotaTimeUnit": '' + product.quotaTimeUnit,
+        'quotaCounterScope': product.quotaCounterScope || 'PRODUCT',
         'name': product.name,
         "operationGroup": {
           "operationConfigs": operations
         },
         'scopes': []
-      }
-      if (product.quotaCounterScope) {
-        newProduct.quotaCounterScope = product.quotaCounterScope
       }
       if (product.space) {
         newProduct.space = product.space
@@ -89,13 +87,11 @@ module.exports = async (config, manifest) => {
       "quota": '' + product.quota,
       "quotaInterval": '' + product.quotaInterval,
       "quotaTimeUnit": '' + product.quotaTimeUnit,
+      'quotaCounterScope': product.quotaCounterScope || 'PRODUCT',
       'name': product.name,
       'proxies': product.proxies,
       'operationGroup': product.operationGroup,
       'scopes': []
-    }
-    if (product.quotaCounterScope) {
-      newProduct.quotaCounterScope = product.quotaCounterScope
     }
     if (product.space) {
       newProduct.space = product.space
